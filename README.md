@@ -47,3 +47,8 @@ https://nethackchallenge.com/ (link comodo per sto progetto https://docs.google.
 
 https://2024.ieee-cog.org/competitions/ (https://elearning.di.unipi.it/pluginfile.php/84349/mod_resource/content/2/AIF_projects_competitions.pdf https://gitlab.com/DracoStriker/pokemon-vgc-engine)(pokemon battle)(Fightingice https://github.com/TeamFightingICE/FightingICE/tree/master/DareFightingICE/AI)  All the competitions’ winning agents are all based on symbolic methods like rule based or search based
 e.g. MCTS. They highly synergize with the topics of the course
+
+
+Agenti che salvano civili in un ambiente post-disastro (tipo simulazione robotica).
+potresti dare batteria agli agenti, tempistiche di salvataggio, eventi improvvisi o cose così.
+Da sciullapre bene
