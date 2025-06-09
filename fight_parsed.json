@@ -1,0 +1,3730 @@
+[
+  {
+    "headers": [
+      "Spellbook",
+      "Spell level",
+      "Direction",
+      "Relative probability",
+      "Probability conditional on price",
+      "Actions to read",
+      "Skillchanges"
+    ],
+    "rows": [
+      [
+        "Spellbook of force bolt",
+        "1",
+        "beam",
+        "3.5%",
+        "12.2%",
+        "4",
+        ""
+      ],
+      [
+        "Spellbook of drain life",
+        "2",
+        "beam",
+        "1.0%",
+        "4.3%",
+        "4",
+        ""
+      ],
+      [
+        "Spellbook of magic missile",
+        "2",
+        "ray",
+        "4.5%",
+        "19.1%",
+        "4",
+        ""
+      ],
+      [
+        "Spellbook of cone of cold",
+        "4",
+        "ray (distant if skilled)",
+        "1.0%",
+        "8.3%",
+        "23",
+        "S"
+      ],
+      [
+        "Spellbook of fireball",
+        "4",
+        "ray (distant if skilled)",
+        "2.0%",
+        "16.7%",
+        "14",
+        "S"
+      ],
+      [
+        "Spellbook of finger of death",
+        "7",
+        "ray",
+        "0.5%",
+        "25.0%",
+        "82",
+        ""
+      ]
+    ]
+  },
+  {
+    "headers": [
+      "Spellbook",
+      "Spell level",
+      "Direction",
+      "Relative probability",
+      "Probability conditional on price",
+      "Actions to read",
+      "Skillchanges"
+    ],
+    "rows": [
+      [
+        "Spellbook of protection",
+        "1",
+        "non-directional",
+        "1.8%",
+        "6.3%",
+        "5",
+        "E"
+      ],
+      [
+        "Spellbook of create monster",
+        "2",
+        "non-directional",
+        "3.5%",
+        "14.9%",
+        "5",
+        ""
+      ],
+      [
+        "Spellbook of remove curse",
+        "3",
+        "non-directional",
+        "2.5%",
+        "10.8%",
+        "12",
+        "S"
+      ],
+      [
+        "Spellbook of create familiar",
+        "6",
+        "non-directional",
+        "1.0%",
+        "19.6%",
+        "44",
+        ""
+      ],
+      [
+        "Spellbook of turn undead",
+        "6",
+        "beam",
+        "1.6%",
+        "31.4%",
+        "50",
+        ""
+      ]
+    ]
+  },
+  {
+    "headers": [
+      "Spellbook",
+      "Spell level",
+      "Direction",
+      "Relative probability",
+      "Probability conditional on price",
+      "Actions to read",
+      "Skillchanges"
+    ],
+    "rows": [
+      [
+        "Spellbook of detect monsters",
+        "1",
+        "non-directional",
+        "4.3%",
+        "15.0%",
+        "3",
+        "S"
+      ],
+      [
+        "Spellbook of light",
+        "1",
+        "non-directional",
+        "4.5%",
+        "15.7%",
+        "3",
+        ""
+      ],
+      [
+        "Spellbook of detect food",
+        "2",
+        "non-directional",
+        "3.0%",
+        "12.8%",
+        "5",
+        "S"
+      ],
+      [
+        "Spellbook of clairvoyance",
+        "3",
+        "non-directional",
+        "1.5%",
+        "16.5%",
+        "8",
+        "S"
+      ],
+      [
+        "Spellbook of detect unseen",
+        "3",
+        "non-directional",
+        "2.0%",
+        "8.6%",
+        "10",
+        ""
+      ],
+      [
+        "Spellbook of identify",
+        "3",
+        "non-directional",
+        "2.0%",
+        "8.6%",
+        "14",
+        "S"
+      ],
+      [
+        "Spellbook of detect treasure",
+        "4",
+        "non-directional",
+        "2.0%",
+        "16.7%",
+        "17",
+        "S"
+      ],
+      [
+        "Spellbook of magic mapping",
+        "5",
+        "non-directional",
+        "1.8%",
+        "47.4%",
+        "37",
+        ""
+      ]
+    ]
+  },
+  {
+    "headers": [
+      "Spellbook",
+      "Spell level",
+      "Direction",
+      "Relative probability",
+      "Probability conditional on price",
+      "Actions to read",
+      "Skillchanges"
+    ],
+    "rows": [
+      [
+        "Spellbook of sleep",
+        "1",
+        "ray",
+        "5.0%",
+        "17.5%",
+        "3",
+        ""
+      ],
+      [
+        "Spellbook of confuse monster",
+        "2",
+        "non-directional",
+        "3.0%",
+        "12.8%",
+        "4",
+        "S"
+      ],
+      [
+        "Spellbook of slow monster",
+        "2",
+        "beam",
+        "3.0%",
+        "12.8%",
+        "4",
+        ""
+      ],
+      [
+        "Spellbook of cause fear",
+        "3",
+        "non-directional",
+        "2.5%",
+        "10.8%",
+        "8",
+        ""
+      ],
+      [
+        "Spellbook of charm monster",
+        "3",
+        "non-directional",
+        "2.0%",
+        "8.6%",
+        "8",
+        ""
+      ]
+    ]
+  },
+  {
+    "headers": [
+      "Spellbook",
+      "Spell level",
+      "Direction",
+      "Relative probability",
+      "Probability conditional on price",
+      "Actions to read",
+      "Skillchanges"
+    ],
+    "rows": [
+      [
+        "Spellbook of jumping",
+        "1",
+        "non-directional",
+        "2.0%",
+        "7.0%",
+        "5",
+        "BSE"
+      ],
+      [
+        "Spellbook of haste self",
+        "3",
+        "non-directional",
+        "3.3%",
+        "14.2%",
+        "10",
+        "S"
+      ],
+      [
+        "Spellbook of invisibility",
+        "4",
+        "non-directional",
+        "2.5%",
+        "20.8%",
+        "17",
+        ""
+      ],
+      [
+        "Spellbook of levitation",
+        "4",
+        "non-directional",
+        "2.0%",
+        "16.7%",
+        "14",
+        "S"
+      ],
+      [
+        "Spellbook of teleport away",
+        "6",
+        "beam",
+        "1.5%",
+        "29.4%",
+        "38",
+        ""
+      ]
+    ]
+  },
+  {
+    "headers": [
+      "Spellbook",
+      "Spell level",
+      "Direction",
+      "Relative probability",
+      "Probability conditional on price",
+      "Actions to read",
+      "Skillchanges"
+    ],
+    "rows": [
+      [
+        "Spellbook of healing",
+        "1",
+        "beam",
+        "4.0%",
+        "14.0%",
+        "4",
+        "S"
+      ],
+      [
+        "Spellbook of cure blindness",
+        "2",
+        "non-directional",
+        "2.5%",
+        "10.6%",
+        "4",
+        ""
+      ],
+      [
+        "Spellbook of cure sickness",
+        "3",
+        "non-directional",
+        "3.2%",
+        "13.8%",
+        "8",
+        ""
+      ],
+      [
+        "Spellbook of extra healing",
+        "3",
+        "beam",
+        "2.7%",
+        "11.6%",
+        "12",
+        ""
+      ],
+      [
+        "Spellbook of stone to flesh",
+        "3",
+        "beam",
+        "1.5%",
+        "6.5%",
+        "4",
+        ""
+      ],
+      [
+        "Spellbook of restore ability",
+        "4",
+        "non-directional",
+        "2.5%",
+        "20.8%",
+        "17",
+        "S"
+      ]
+    ]
+  },
+  {
+    "headers": [
+      "Spellbook",
+      "Spell level",
+      "Direction",
+      "Relative probability",
+      "Probability conditional on price",
+      "Actions to read",
+      "Skillchanges"
+    ],
+    "rows": [
+      [
+        "Spellbook of knock",
+        "1",
+        "beam",
+        "3.5%",
+        "12.2%",
+        "3",
+        ""
+      ],
+      [
+        "Spellbook of wizard lock",
+        "2",
+        "beam",
+        "3.0%",
+        "12.8%",
+        "5",
+        ""
+      ],
+      [
+        "Spellbook of dig",
+        "5",
+        "ray",
+        "2.0%",
+        "52.6%",
+        "32",
+        ""
+      ],
+      [
+        "Spellbook of polymorph",
+        "6",
+        "beam",
+        "1.0%",
+        "19.6%",
+        "50",
+        ""
+      ],
+      [
+        "Spellbook of cancellation",
+        "7",
+        "beam",
+        "1.5%",
+        "75.0%",
+        "66",
+        ""
+      ]
+    ]
+  },
+  {
+    "headers": [],
+    "rows": [
+      [
+        "dagger",
+        "dagger",
+        "4 zm",
+        "1",
+        "10",
+        "30",
+        "2.5",
+        "2",
+        "iron",
+        "",
+        "",
+        ")"
+      ],
+      [
+        "silver dagger",
+        "dagger",
+        "40 zm",
+        "1",
+        "12",
+        "3",
+        "2.5",
+        "2",
+        "silver",
+        "",
+        "",
+        ")"
+      ],
+      [
+        "athame",
+        "dagger",
+        "4 zm",
+        "1",
+        "10",
+        "N/A",
+        "2.5",
+        "2",
+        "iron",
+        "",
+        "",
+        ")"
+      ],
+      [
+        "elven dagger",
+        "dagger",
+        "4 zm",
+        "1",
+        "10",
+        "10 †",
+        "3",
+        "2",
+        "wood",
+        "runed dagger",
+        "",
+        ")"
+      ],
+      [
+        "worm tooth",
+        "knife",
+        "2 zm",
+        "1",
+        "20",
+        "N/A",
+        "1.5",
+        "1.5",
+        "undefined",
+        "",
+        "",
+        ")"
+      ],
+      [
+        "knife (shito)",
+        "knife",
+        "4 zm",
+        "1",
+        "5",
+        "20",
+        "2",
+        "1.5",
+        "iron",
+        "",
+        "",
+        ")"
+      ],
+      [
+        "stiletto",
+        "knife",
+        "4 zm",
+        "1",
+        "5",
+        "5",
+        "2",
+        "1.5",
+        "iron",
+        "",
+        "",
+        ")"
+      ],
+      [
+        "scalpel",
+        "knife",
+        "4 zm",
+        "1",
+        "5",
+        "N/A",
+        "2",
+        "2",
+        "metal",
+        "",
+        "",
+        ")"
+      ],
+      [
+        "crysknife",
+        "knife",
+        "100 zm",
+        "1",
+        "20",
+        "N/A",
+        "5.5",
+        "5.5",
+        "mineral",
+        "",
+        "",
+        ")"
+      ],
+      [
+        "axe",
+        "axe",
+        "8 zm",
+        "1",
+        "60",
+        "40",
+        "3.5",
+        "2.5",
+        "iron",
+        "",
+        "",
+        ")"
+      ],
+      [
+        "battle-axe",
+        "axe",
+        "40 zm",
+        "2",
+        "120",
+        "10",
+        "7",
+        "8.5",
+        "iron",
+        "double-headed axe",
+        "",
+        ")"
+      ],
+      [
+        "pick-axe",
+        "pick-axe",
+        "50 zm",
+        "1",
+        "100",
+        "tool",
+        "3.5",
+        "2",
+        "iron",
+        "",
+        "",
+        "("
+      ],
+      [
+        "dwarvish mattock",
+        "pick-axe",
+        "50 zm",
+        "2",
+        "120",
+        "13 †",
+        "6.5",
+        "11.5",
+        "iron",
+        "broad pick",
+        "",
+        ")"
+      ],
+      [
+        "orcish short sword",
+        "short sword",
+        "10 zm",
+        "1",
+        "30",
+        "3 †",
+        "3",
+        "4.5",
+        "iron",
+        "crude short sword",
+        "",
+        ")"
+      ],
+      [
+        "short sword (wakizashi)",
+        "short sword",
+        "10 zm",
+        "1",
+        "30",
+        "8",
+        "3.5",
+        "4.5",
+        "iron",
+        "",
+        "",
+        ")"
+      ],
+      [
+        "dwarvish short sword",
+        "short sword",
+        "10 zm",
+        "1",
+        "30",
+        "2 †",
+        "4",
+        "4.5",
+        "iron",
+        "broad short sword",
+        "",
+        ")"
+      ],
+      [
+        "elven short sword",
+        "short sword",
+        "10 zm",
+        "1",
+        "30",
+        "2 †",
+        "4.5",
+        "4.5",
+        "wood",
+        "runed short sword",
+        "",
+        ")"
+      ],
+      [
+        "broadsword (ninja-to)",
+        "broadsword",
+        "10 zm",
+        "1",
+        "70",
+        "8",
+        "5",
+        "4.5",
+        "iron",
+        "",
+        "",
+        ")"
+      ],
+      [
+        "runesword",
+        "broadsword",
+        "300 zm",
+        "1",
+        "40",
+        "N/A",
+        "5",
+        "4.5",
+        "iron",
+        "runed broadsword",
+        "",
+        ")"
+      ],
+      [
+        "elven broadsword",
+        "broadsword",
+        "10 zm",
+        "1",
+        "70",
+        "4 †",
+        "6",
+        "4.5",
+        "wood",
+        "runed broadsword",
+        "",
+        ")"
+      ],
+      [
+        "long sword",
+        "long sword",
+        "15 zm",
+        "1",
+        "40",
+        "50 †",
+        "4.5",
+        "6.5",
+        "iron",
+        "",
+        "",
+        ")"
+      ],
+      [
+        "katana",
+        "long sword",
+        "80 zm",
+        "1",
+        "40",
+        "4",
+        "5.5",
+        "6.5",
+        "iron",
+        "samurai sword",
+        "",
+        ")"
+      ],
+      [
+        "two-handed sword",
+        "two-handed sword",
+        "50 zm",
+        "2",
+        "150",
+        "22",
+        "6.5",
+        "10.5",
+        "iron",
+        "",
+        "",
+        ")"
+      ],
+      [
+        "tsurugi",
+        "two-handed sword",
+        "500 zm",
+        "2",
+        "60",
+        "N/A",
+        "8.5",
+        "11.5",
+        "metal",
+        "long samurai sword",
+        "",
+        ")"
+      ],
+      [
+        "scimitar",
+        "scimitar",
+        "15 zm",
+        "1",
+        "40",
+        "15 †",
+        "4.5",
+        "4.5",
+        "iron",
+        "curved sword",
+        "",
+        ")"
+      ],
+      [
+        "silver saber",
+        "saber",
+        "75 zm",
+        "1",
+        "40",
+        "6",
+        "4.5",
+        "4.5",
+        "silver",
+        "",
+        "",
+        ")"
+      ],
+      [
+        "club",
+        "club",
+        "3 zm",
+        "1",
+        "30",
+        "12",
+        "3.5",
+        "2",
+        "wood",
+        "",
+        "",
+        ")"
+      ],
+      [
+        "aklys",
+        "club",
+        "4 zm",
+        "1",
+        "15",
+        "8",
+        "3.5",
+        "2",
+        "iron",
+        "thonged club",
+        "",
+        ")"
+      ],
+      [
+        "mace",
+        "mace",
+        "5 zm",
+        "1",
+        "30",
+        "40",
+        "4.5",
+        "3.5",
+        "iron",
+        "",
+        "",
+        ")"
+      ],
+      [
+        "morning star",
+        "morning star",
+        "10 zm",
+        "1",
+        "120",
+        "12",
+        "5",
+        "4.5",
+        "iron",
+        "",
+        "",
+        ")"
+      ],
+      [
+        "flail (nunchaku)",
+        "flail",
+        "4 zm",
+        "1",
+        "15",
+        "40",
+        "4.5",
+        "5",
+        "iron",
+        "",
+        "",
+        ")"
+      ],
+      [
+        "grappling hook",
+        "flail",
+        "50 zm",
+        "1",
+        "30",
+        "tool",
+        "1.5",
+        "3.5",
+        "iron",
+        "iron hook",
+        "",
+        "("
+      ],
+      [
+        "war hammer",
+        "hammer",
+        "5 zm",
+        "1",
+        "50",
+        "15",
+        "3.5",
+        "2.5",
+        "iron",
+        "",
+        "",
+        ")"
+      ],
+      [
+        "quarterstaff",
+        "quarterstaff",
+        "5 zm",
+        "2",
+        "40",
+        "11 †",
+        "3.5",
+        "3.5",
+        "wood",
+        "staff",
+        "",
+        ")"
+      ],
+      [
+        "partisan",
+        "polearms",
+        "10 zm",
+        "2",
+        "80",
+        "5",
+        "3.5",
+        "4.5",
+        "iron",
+        "vulgar polearm",
+        "",
+        ")"
+      ],
+      [
+        "fauchard",
+        "polearms",
+        "5 zm",
+        "2",
+        "60",
+        "6",
+        "3.5",
+        "4.5",
+        "iron",
+        "pole sickle",
+        "",
+        ")"
+      ],
+      [
+        "glaive (naginata)",
+        "polearms",
+        "6 zm",
+        "2",
+        "75",
+        "8",
+        "3.5",
+        "5.5",
+        "iron",
+        "single-edged polearm",
+        "",
+        ")"
+      ],
+      [
+        "bec de corbin",
+        "polearms",
+        "8 zm",
+        "2",
+        "100",
+        "4",
+        "4.5",
+        "3.5",
+        "iron",
+        "beaked polearm",
+        "",
+        ")"
+      ],
+      [
+        "spetum",
+        "polearms",
+        "5 zm",
+        "2",
+        "50",
+        "5",
+        "4.5",
+        "7",
+        "iron",
+        "forked polearm",
+        "",
+        ")"
+      ],
+      [
+        "lucern hammer",
+        "polearms",
+        "7 zm",
+        "2",
+        "150",
+        "5",
+        "5",
+        "3.5",
+        "iron",
+        "pronged polearm",
+        "",
+        ")"
+      ],
+      [
+        "guisarme",
+        "polearms",
+        "5 zm",
+        "2",
+        "80",
+        "6",
+        "5",
+        "4.5",
+        "iron",
+        "pruning hook",
+        "",
+        ")"
+      ],
+      [
+        "ranseur",
+        "polearms",
+        "6 zm",
+        "2",
+        "50",
+        "5",
+        "5",
+        "5",
+        "iron",
+        "hilted polearm",
+        "",
+        ")"
+      ],
+      [
+        "voulge",
+        "polearms",
+        "5 zm",
+        "2",
+        "125",
+        "4",
+        "5",
+        "5",
+        "iron",
+        "pole cleaver",
+        "",
+        ")"
+      ],
+      [
+        "bill-guisarme",
+        "polearms",
+        "7 zm",
+        "2",
+        "120",
+        "4",
+        "5",
+        "5.5",
+        "iron",
+        "hooked polearm",
+        "",
+        ")"
+      ],
+      [
+        "bardiche",
+        "polearms",
+        "7 zm",
+        "2",
+        "120",
+        "4",
+        "5",
+        "7.5",
+        "iron",
+        "long poleaxe",
+        "",
+        ")"
+      ],
+      [
+        "halberd",
+        "polearms",
+        "10 zm",
+        "2",
+        "150",
+        "8",
+        "5.5",
+        "7",
+        "iron",
+        "angled poleaxe",
+        "",
+        ")"
+      ],
+      [
+        "orcish spear",
+        "spear",
+        "3 zm",
+        "1",
+        "30",
+        "13 †",
+        "3",
+        "4.5",
+        "iron",
+        "crude spear",
+        "",
+        ")"
+      ],
+      [
+        "spear",
+        "spear",
+        "3 zm",
+        "1",
+        "30",
+        "50 †",
+        "3.5",
+        "4.5",
+        "iron",
+        "",
+        "",
+        ")"
+      ],
+      [
+        "silver spear",
+        "spear",
+        "40 zm",
+        "1",
+        "36",
+        "2",
+        "3.5",
+        "4.5",
+        "silver",
+        "",
+        "",
+        ")"
+      ],
+      [
+        "elven spear",
+        "spear",
+        "3 zm",
+        "1",
+        "30",
+        "10 †",
+        "4",
+        "4.5",
+        "wood",
+        "runed spear",
+        "",
+        ")"
+      ],
+      [
+        "dwarvish spear",
+        "spear",
+        "3 zm",
+        "1",
+        "35",
+        "12 †",
+        "4.5",
+        "4.5",
+        "iron",
+        "stout spear",
+        "",
+        ")"
+      ],
+      [
+        "javelin",
+        "spear",
+        "3 zm",
+        "1",
+        "20",
+        "10",
+        "3.5",
+        "3.5",
+        "iron",
+        "throwing spear",
+        "",
+        ")"
+      ],
+      [
+        "trident",
+        "trident",
+        "5 zm",
+        "1",
+        "25",
+        "8",
+        "4.5",
+        "7.5",
+        "iron",
+        "",
+        "",
+        ")"
+      ],
+      [
+        "lance 1",
+        "lance",
+        "10 zm",
+        "1",
+        "180",
+        "4",
+        "3.5",
+        "4.5",
+        "iron",
+        "",
+        "",
+        ")"
+      ],
+      [
+        "orcish bow",
+        "bow",
+        "60 zm",
+        "1",
+        "30",
+        "12 †",
+        "1.5",
+        "1.5",
+        "wood",
+        "crude bow",
+        "",
+        ")"
+      ],
+      [
+        "orcish arrow 2",
+        "bow",
+        "2 zm",
+        "1",
+        "1",
+        "20 †",
+        "3",
+        "3.5",
+        "iron",
+        "crude arrow",
+        "",
+        ")"
+      ],
+      [
+        "bow",
+        "bow",
+        "60 zm",
+        "1",
+        "30",
+        "24",
+        "1.5",
+        "1.5",
+        "wood",
+        "",
+        "",
+        ")"
+      ],
+      [
+        "arrow 2",
+        "bow",
+        "2 zm",
+        "1",
+        "1",
+        "55 †",
+        "3.5",
+        "3.5",
+        "iron",
+        "",
+        "",
+        ")"
+      ],
+      [
+        "elven bow",
+        "bow",
+        "60 zm",
+        "1",
+        "30",
+        "12 †",
+        "1.5",
+        "1.5",
+        "wood",
+        "runed bow",
+        "",
+        ")"
+      ],
+      [
+        "elven arrow 2",
+        "bow",
+        "2 zm",
+        "1",
+        "1",
+        "20 †",
+        "4",
+        "3.5",
+        "wood",
+        "runed arrow",
+        "",
+        ")"
+      ],
+      [
+        "yumi",
+        "bow",
+        "60 zm",
+        "1",
+        "30",
+        "0",
+        "1.5",
+        "1.5",
+        "wood",
+        "long bow",
+        "",
+        ")"
+      ],
+      [
+        "ya 2",
+        "bow",
+        "4 zm",
+        "1",
+        "1",
+        "15",
+        "4",
+        "4",
+        "metal",
+        "bamboo arrow",
+        "",
+        ")"
+      ],
+      [
+        "silver arrow 2",
+        "bow",
+        "5 zm",
+        "1",
+        "1",
+        "12",
+        "3.5",
+        "3.5",
+        "silver",
+        "",
+        "",
+        ")"
+      ],
+      [
+        "sling",
+        "sling",
+        "20 zm",
+        "1",
+        "3",
+        "40",
+        "1.5",
+        "1.5",
+        "leather",
+        "",
+        "",
+        ")"
+      ],
+      [
+        "flint stone 2",
+        "sling",
+        "1 zm",
+        "1",
+        "10",
+        "gem",
+        "3.5",
+        "3.5",
+        "mineral",
+        "gray stone",
+        "",
+        "*"
+      ],
+      [
+        "crossbow",
+        "crossbow",
+        "40 zm",
+        "1",
+        "50",
+        "45 †",
+        "1.5",
+        "1.5",
+        "wood",
+        "",
+        "",
+        ")"
+      ],
+      [
+        "crossbow bolt 2",
+        "crossbow",
+        "2 zm",
+        "1",
+        "1",
+        "55 †",
+        "3.5",
+        "4.5",
+        "iron",
+        "",
+        "",
+        ")"
+      ],
+      [
+        "dart 2",
+        "dart",
+        "2 zm",
+        "1",
+        "1",
+        "60 †",
+        "2",
+        "1.5",
+        "iron",
+        "",
+        "",
+        ")"
+      ],
+      [
+        "shuriken 2",
+        "shuriken",
+        "5 zm",
+        "1",
+        "1",
+        "35",
+        "4.5",
+        "3.5",
+        "iron",
+        "throwing star",
+        "",
+        ")"
+      ],
+      [
+        "boomerang 2",
+        "boomerang",
+        "20 zm",
+        "1",
+        "5",
+        "15",
+        "5",
+        "5",
+        "wood",
+        "",
+        "",
+        ")"
+      ],
+      [
+        "bullwhip",
+        "whip",
+        "4 zm",
+        "1",
+        "20",
+        "2",
+        "1.5",
+        "1",
+        "leather",
+        "",
+        "",
+        ")"
+      ],
+      [
+        "rubber hose",
+        "whip",
+        "3 zm",
+        "1",
+        "20",
+        "N/A",
+        "2.5",
+        "2",
+        "plastic",
+        "",
+        "",
+        ")"
+      ],
+      [
+        "unicorn horn",
+        "unicorn horn",
+        "100 zm",
+        "2",
+        "20",
+        "tool",
+        "6.5",
+        "6.5",
+        "bone",
+        "",
+        "",
+        "("
+      ]
+    ]
+  },
+  {
+    "headers": [],
+    "rows": [
+      [
+        "T-shirt",
+        "shirt",
+        "2",
+        "5",
+        "0",
+        "∞",
+        "5",
+        "1.0",
+        "cloth",
+        "Shop",
+        "",
+        "2",
+        "",
+        "—",
+        "0"
+      ],
+      [
+        "leather jacket",
+        "body armor",
+        "10",
+        "30",
+        "1",
+        "30",
+        "6",
+        "5.0",
+        "leather",
+        "",
+        "",
+        "12",
+        "",
+        "—",
+        "0"
+      ],
+      [
+        "leather armor",
+        "body armor",
+        "5",
+        "150",
+        "2",
+        "75",
+        "7",
+        "21",
+        "leather",
+        "",
+        "1",
+        "82",
+        "",
+        "—",
+        "3"
+      ],
+      [
+        "orcish ring mail",
+        "body armor",
+        "80",
+        "250",
+        "2",
+        "125",
+        "7",
+        "36",
+        "iron",
+        "",
+        "1",
+        "20",
+        "",
+        "crude ring mail",
+        "5"
+      ],
+      [
+        "studded leather armor",
+        "body armor",
+        "15",
+        "200",
+        "3",
+        "67",
+        "8",
+        "25",
+        "leather",
+        "",
+        "1",
+        "72",
+        "",
+        "—",
+        "3"
+      ],
+      [
+        "ring mail",
+        "body armor",
+        "100",
+        "250",
+        "3",
+        "83",
+        "8",
+        "31",
+        "iron",
+        "",
+        "1",
+        "72",
+        "",
+        "—",
+        "5"
+      ],
+      [
+        "scale mail",
+        "body armor",
+        "45",
+        "250",
+        "4",
+        "63",
+        "9",
+        "28",
+        "iron",
+        "",
+        "1",
+        "72",
+        "",
+        "—",
+        "5"
+      ],
+      [
+        "orcish chain mail",
+        "body armor",
+        "75",
+        "300",
+        "4",
+        "75",
+        "9",
+        "33",
+        "iron",
+        "",
+        "1",
+        "20",
+        "",
+        "crude chain mail",
+        "5"
+      ],
+      [
+        "chain mail",
+        "body armor",
+        "75",
+        "300",
+        "5",
+        "60",
+        "10",
+        "30",
+        "iron",
+        "",
+        "1",
+        "72",
+        "",
+        "—",
+        "5"
+      ],
+      [
+        "elven mithril-coat",
+        "body armor",
+        "240",
+        "150",
+        "5",
+        "30",
+        "12",
+        "13",
+        "mithril",
+        "",
+        "2",
+        "15",
+        "",
+        "—",
+        "1"
+      ],
+      [
+        "splint mail",
+        "body armor",
+        "80",
+        "400",
+        "6",
+        "67",
+        "11",
+        "36",
+        "iron",
+        "",
+        "1",
+        "62",
+        "",
+        "—",
+        "5"
+      ],
+      [
+        "banded mail",
+        "body armor",
+        "90",
+        "350",
+        "6",
+        "58",
+        "11",
+        "32",
+        "iron",
+        "",
+        "1",
+        "72",
+        "",
+        "—",
+        "5"
+      ],
+      [
+        "dwarvish mithril-coat",
+        "body armor",
+        "240",
+        "150",
+        "6",
+        "25",
+        "11",
+        "14",
+        "mithril",
+        "",
+        "2",
+        "10",
+        "",
+        "—",
+        "1"
+      ],
+      [
+        "bronze plate mail",
+        "body armor",
+        "400",
+        "450",
+        "6",
+        "75",
+        "11",
+        "41",
+        "copper",
+        "",
+        "1",
+        "25",
+        "",
+        "—",
+        "5"
+      ],
+      [
+        "plate mail (tanko)",
+        "body armor",
+        "600",
+        "450",
+        "7",
+        "64",
+        "12",
+        "38",
+        "iron",
+        "",
+        "2",
+        "44",
+        "",
+        "—",
+        "5"
+      ],
+      [
+        "crystal plate mail",
+        "body armor",
+        "820",
+        "450",
+        "7",
+        "64",
+        "12",
+        "38",
+        "glass",
+        "",
+        "2",
+        "10",
+        "",
+        "—",
+        "5"
+      ],
+      [
+        "dragon scales",
+        "body armor",
+        "500",
+        "40",
+        "3",
+        "13",
+        "8",
+        "5.0",
+        "dragon hide",
+        "Resist %",
+        "",
+        "—",
+        "",
+        "—",
+        "5"
+      ],
+      [
+        "dragon scale mail",
+        "body armor",
+        "900",
+        "40",
+        "9",
+        "4.4",
+        "14",
+        "2.9",
+        "dragon hide",
+        "Resist %",
+        "",
+        "—",
+        "Yes",
+        "—",
+        "5"
+      ],
+      [
+        "mummy wrapping",
+        "cloak",
+        "2",
+        "3",
+        "0",
+        "∞",
+        "5",
+        "0.6",
+        "cloth",
+        "Vis",
+        "1",
+        "—",
+        "",
+        "—",
+        "0"
+      ],
+      [
+        "orcish cloak",
+        "cloak",
+        "40",
+        "10",
+        "0",
+        "∞",
+        "5",
+        "2.0",
+        "cloth",
+        "",
+        "1",
+        "8",
+        "",
+        "coarse mantelet",
+        "0"
+      ],
+      [
+        "dwarvish cloak",
+        "cloak",
+        "50",
+        "10",
+        "0",
+        "∞",
+        "5",
+        "2.0",
+        "cloth",
+        "",
+        "1",
+        "8",
+        "",
+        "hooded cloak",
+        "0"
+      ],
+      [
+        "leather cloak",
+        "cloak",
+        "40",
+        "15",
+        "1",
+        "15",
+        "6",
+        "2.5",
+        "leather",
+        "",
+        "1",
+        "8",
+        "",
+        "—",
+        "0"
+      ],
+      [
+        "cloak of displacement",
+        "cloak",
+        "50",
+        "10",
+        "1",
+        "10",
+        "6",
+        "1.7",
+        "cloth",
+        "Displ",
+        "1",
+        "10",
+        "Yes",
+        "*piece of cloth",
+        "0"
+      ],
+      [
+        "oilskin cloak",
+        "cloak",
+        "50",
+        "10",
+        "1",
+        "10",
+        "6",
+        "1.7",
+        "cloth",
+        "Water",
+        "2",
+        "8",
+        "",
+        "slippery cloak",
+        "0"
+      ],
+      [
+        "alchemy smock",
+        "cloak",
+        "50",
+        "10",
+        "1",
+        "10",
+        "6",
+        "1.7",
+        "cloth",
+        "Poi+Acd",
+        "1",
+        "9",
+        "Yes",
+        "apron",
+        "0"
+      ],
+      [
+        "cloak of invisibility",
+        "cloak",
+        "60",
+        "10",
+        "1",
+        "10",
+        "6",
+        "1.7",
+        "cloth",
+        "Invis",
+        "1",
+        "10",
+        "Yes",
+        "*opera cloak",
+        "0"
+      ],
+      [
+        "cloak of magic resistance",
+        "cloak",
+        "60",
+        "10",
+        "1",
+        "10",
+        "6",
+        "1.7",
+        "cloth",
+        "Magic",
+        "1",
+        "2",
+        "Yes",
+        "*ornamental cope",
+        "0"
+      ],
+      [
+        "elven cloak",
+        "cloak",
+        "60",
+        "10",
+        "1",
+        "10",
+        "8",
+        "1.3",
+        "cloth",
+        "Stealth",
+        "1",
+        "8",
+        "Yes",
+        "faded pall",
+        "0"
+      ],
+      [
+        "robe",
+        "cloak",
+        "50",
+        "15",
+        "2",
+        "7.5",
+        "7",
+        "2.1",
+        "cloth",
+        "Spell 1",
+        "2",
+        "3",
+        "Yes",
+        "—",
+        "0"
+      ],
+      [
+        "cloak of protection",
+        "cloak",
+        "50",
+        "10",
+        "3",
+        "3.3",
+        "8",
+        "1.3",
+        "cloth",
+        "Prot",
+        "3",
+        "9",
+        "Yes",
+        "*tattered cape",
+        "0"
+      ],
+      [
+        "fedora",
+        "helm",
+        "1",
+        "3",
+        "0",
+        "∞",
+        "5",
+        "0.6",
+        "cloth",
+        "",
+        "",
+        "—",
+        "",
+        "—",
+        "0"
+      ],
+      [
+        "dunce cap",
+        "helm",
+        "1",
+        "4",
+        "0",
+        "∞",
+        "5",
+        "0.8",
+        "cloth",
+        "Stupid",
+        "",
+        "3",
+        "Yes",
+        "conical hat",
+        "1"
+      ],
+      [
+        "cornuthaum",
+        "helm",
+        "80",
+        "4",
+        "0",
+        "∞",
+        "7 Wizard, 5 others",
+        "0.57 Wizard, 0.80 others",
+        "cloth",
+        "Clair",
+        "1",
+        "3",
+        "Yes",
+        "conical hat",
+        "1"
+      ],
+      [
+        "dented pot",
+        "helm",
+        "8",
+        "10",
+        "1",
+        "10",
+        "6",
+        "1.7",
+        "iron",
+        "",
+        "",
+        "2",
+        "",
+        "—",
+        "0"
+      ],
+      [
+        "elven leather helm",
+        "helm",
+        "8",
+        "3",
+        "1",
+        "3.0",
+        "8",
+        "0.38",
+        "leather",
+        "",
+        "",
+        "6",
+        "",
+        "leather hat",
+        "1"
+      ],
+      [
+        "helmet (kabuto)",
+        "helm",
+        "10",
+        "30",
+        "1",
+        "30",
+        "6",
+        "5.0",
+        "iron",
+        "",
+        "",
+        "10",
+        "",
+        "*plumed helmet",
+        "1"
+      ],
+      [
+        "orcish helm",
+        "helm",
+        "10",
+        "30",
+        "1",
+        "30",
+        "6",
+        "5.0",
+        "iron",
+        "",
+        "",
+        "6",
+        "",
+        "iron skull cap",
+        "1"
+      ],
+      [
+        "helm of brilliance",
+        "helm",
+        "50",
+        "50",
+        "1",
+        "50",
+        "6",
+        "8.3",
+        "iron",
+        "Int+Wis",
+        "",
+        "6",
+        "Yes",
+        "*etched helmet",
+        "1"
+      ],
+      [
+        "helm of opposite alignment",
+        "helm",
+        "50",
+        "50",
+        "1",
+        "50",
+        "6",
+        "8.3",
+        "iron",
+        "Align",
+        "",
+        "6",
+        "Yes",
+        "*crested helmet",
+        "1"
+      ],
+      [
+        "helm of telepathy",
+        "helm",
+        "50",
+        "50",
+        "1",
+        "50",
+        "6",
+        "8.3",
+        "iron",
+        "ESP",
+        "",
+        "2",
+        "Yes",
+        "*visored helmet",
+        "1"
+      ],
+      [
+        "dwarvish iron helm",
+        "helm",
+        "20",
+        "40",
+        "2",
+        "20",
+        "7",
+        "5.7",
+        "iron",
+        "",
+        "",
+        "6",
+        "",
+        "hard hat",
+        "1"
+      ],
+      [
+        "leather gloves (yugake)",
+        "gloves",
+        "8",
+        "10",
+        "1",
+        "10",
+        "6",
+        "1.7",
+        "leather",
+        "",
+        "",
+        "16",
+        "",
+        "*old gloves",
+        "1"
+      ],
+      [
+        "gauntlets of dexterity",
+        "gloves",
+        "50",
+        "10",
+        "1",
+        "10",
+        "6",
+        "1.7",
+        "leather",
+        "Dex",
+        "",
+        "8",
+        "Yes",
+        "*padded gloves",
+        "1"
+      ],
+      [
+        "gauntlets of fumbling",
+        "gloves",
+        "50",
+        "10",
+        "1",
+        "10",
+        "6",
+        "1.7",
+        "leather",
+        "Fumble",
+        "",
+        "8",
+        "Yes",
+        "*riding gloves",
+        "1"
+      ],
+      [
+        "gauntlets of power",
+        "gloves",
+        "50",
+        "30",
+        "1",
+        "30",
+        "6",
+        "5.0",
+        "iron",
+        "Str",
+        "",
+        "8",
+        "Yes",
+        "*fencing gloves",
+        "1"
+      ],
+      [
+        "small shield",
+        "shield",
+        "3",
+        "30",
+        "1",
+        "30",
+        "6",
+        "5.0",
+        "wood",
+        "Spell 2",
+        "",
+        "6",
+        "",
+        "—",
+        "0"
+      ],
+      [
+        "orcish shield",
+        "shield",
+        "7",
+        "50",
+        "1",
+        "50",
+        "6",
+        "8.3",
+        "iron",
+        "",
+        "",
+        "2",
+        "",
+        "red-eyed shield",
+        "0"
+      ],
+      [
+        "Uruk-hai shield",
+        "shield",
+        "7",
+        "50",
+        "1",
+        "50",
+        "6",
+        "8.3",
+        "iron",
+        "",
+        "",
+        "2",
+        "",
+        "white-handed shield",
+        "0"
+      ],
+      [
+        "elven shield",
+        "shield",
+        "7",
+        "40",
+        "2",
+        "20",
+        "9",
+        "4.4",
+        "wood",
+        "",
+        "",
+        "2",
+        "",
+        "blue and green shield",
+        "0"
+      ],
+      [
+        "dwarvish roundshield",
+        "shield",
+        "10",
+        "100",
+        "2",
+        "50",
+        "7",
+        "14",
+        "iron",
+        "",
+        "",
+        "4",
+        "",
+        "large round shield",
+        "0"
+      ],
+      [
+        "large shield",
+        "shield",
+        "10",
+        "100",
+        "2",
+        "50",
+        "7",
+        "14",
+        "iron",
+        "",
+        "",
+        "7",
+        "",
+        "—",
+        "0"
+      ],
+      [
+        "shield of reflection",
+        "shield",
+        "50",
+        "50",
+        "2",
+        "25",
+        "7",
+        "7.1",
+        "silver",
+        "Reflect",
+        "",
+        "3",
+        "Yes",
+        "polished silver",
+        "0"
+      ],
+      [
+        "low boots",
+        "boots",
+        "8",
+        "10",
+        "1",
+        "10",
+        "6",
+        "1.7",
+        "leather",
+        "",
+        "",
+        "25",
+        "",
+        "walking shoes",
+        "2"
+      ],
+      [
+        "elven boots",
+        "boots",
+        "8",
+        "15",
+        "1",
+        "15",
+        "8",
+        "1.9",
+        "leather",
+        "Stealth",
+        "",
+        "12",
+        "Yes",
+        "*mud boots",
+        "2"
+      ],
+      [
+        "kicking boots",
+        "boots",
+        "8",
+        "50",
+        "1",
+        "50",
+        "6",
+        "8.3",
+        "iron",
+        "Kick",
+        "",
+        "12",
+        "Yes",
+        "*buckled boots",
+        "2"
+      ],
+      [
+        "fumble boots",
+        "boots",
+        "30",
+        "20",
+        "1",
+        "20",
+        "6",
+        "3.3",
+        "leather",
+        "Fumble",
+        "",
+        "12",
+        "Yes",
+        "*riding boots",
+        "2"
+      ],
+      [
+        "levitation boots",
+        "boots",
+        "30",
+        "15",
+        "1",
+        "15",
+        "6",
+        "2.5",
+        "leather",
+        "Lev",
+        "",
+        "12",
+        "Yes",
+        "*snow boots",
+        "2"
+      ],
+      [
+        "jumping boots",
+        "boots",
+        "50",
+        "20",
+        "1",
+        "20",
+        "6",
+        "3.3",
+        "leather",
+        "Jump",
+        "",
+        "12",
+        "Yes",
+        "*hiking boots",
+        "2"
+      ],
+      [
+        "speed boots",
+        "boots",
+        "50",
+        "20",
+        "1",
+        "20",
+        "6",
+        "3.3",
+        "leather",
+        "Speed",
+        "",
+        "12",
+        "Yes",
+        "*combat boots",
+        "2"
+      ],
+      [
+        "water walking boots",
+        "boots",
+        "50",
+        "20",
+        "1",
+        "20",
+        "6",
+        "3.3",
+        "leather",
+        "WWalk",
+        "",
+        "12",
+        "Yes",
+        "*jungle boots",
+        "2"
+      ],
+      [
+        "high boots",
+        "boots",
+        "12",
+        "20",
+        "2",
+        "10",
+        "7",
+        "2.9",
+        "leather",
+        "",
+        "",
+        "15",
+        "",
+        "jackboots",
+        "2"
+      ],
+      [
+        "iron shoes",
+        "boots",
+        "16",
+        "50",
+        "2",
+        "25",
+        "7",
+        "7.1",
+        "iron",
+        "",
+        "",
+        "7",
+        "",
+        "hard shoes",
+        "2"
+      ]
+    ]
+  },
+  {
+    "headers": [
+      "Ring",
+      "Cost",
+      "Extrinsic granted",
+      "Notes"
+    ],
+    "rows": [
+      [
+        "meat ring",
+        "5",
+        "None",
+        "symbolized by % ; never randomly generated"
+      ],
+      [
+        ""
+      ],
+      [
+        "ring of adornment",
+        "100",
+        "+n charisma",
+        "chargeable"
+      ],
+      [
+        "ring of hunger",
+        "100",
+        "voracious hunger",
+        "90% generated cursed"
+      ],
+      [
+        "ring of protection",
+        "100",
+        "+n protection",
+        "chargeable"
+      ],
+      [
+        "ring of protection from shape changers",
+        "100",
+        "protection from shape changers",
+        ""
+      ],
+      [
+        "ring of stealth",
+        "100",
+        "stealth",
+        ""
+      ],
+      [
+        "ring of sustain ability",
+        "100",
+        "sustain ability",
+        ""
+      ],
+      [
+        "ring of warning",
+        "100",
+        "warning",
+        ""
+      ],
+      [
+        ""
+      ],
+      [
+        "ring of aggravate monster",
+        "150",
+        "aggravate monster",
+        "90% generated cursed"
+      ],
+      [
+        "ring of cold resistance",
+        "150",
+        "cold resistance",
+        ""
+      ],
+      [
+        "ring of gain constitution",
+        "150",
+        "+n constitution",
+        "chargeable"
+      ],
+      [
+        "ring of gain strength",
+        "150",
+        "+n strength",
+        "chargeable"
+      ],
+      [
+        "ring of increase accuracy",
+        "150",
+        "+n to-hit bonus",
+        "chargeable"
+      ],
+      [
+        "ring of increase damage",
+        "150",
+        "+n damage bonus",
+        "chargeable"
+      ],
+      [
+        "ring of invisibility",
+        "150",
+        "invisibility",
+        "cursed if from a Nazgul"
+      ],
+      [
+        "ring of poison resistance",
+        "150",
+        "poison resistance",
+        ""
+      ],
+      [
+        "ring of see invisible",
+        "150",
+        "see invisible",
+        ""
+      ],
+      [
+        "ring of shock resistance",
+        "150",
+        "shock resistance",
+        ""
+      ],
+      [
+        ""
+      ],
+      [
+        "ring of fire resistance",
+        "200",
+        "fire resistance",
+        ""
+      ],
+      [
+        "ring of free action",
+        "200",
+        "free action",
+        ""
+      ],
+      [
+        "ring of levitation",
+        "200",
+        "levitation",
+        ""
+      ],
+      [
+        "ring of regeneration",
+        "200",
+        "regeneration",
+        ""
+      ],
+      [
+        "ring of searching",
+        "200",
+        "searching",
+        ""
+      ],
+      [
+        "ring of slow digestion",
+        "200",
+        "slow digestion",
+        ""
+      ],
+      [
+        "ring of teleportation",
+        "200",
+        "teleportitis",
+        "90% generated cursed"
+      ],
+      [
+        ""
+      ],
+      [
+        "ring of conflict",
+        "300",
+        "conflict",
+        ""
+      ],
+      [
+        "ring of polymorph",
+        "300",
+        "polymorphitis",
+        "90% generated cursed"
+      ],
+      [
+        "ring of polymorph control",
+        "300",
+        "polymorph control",
+        ""
+      ],
+      [
+        "ring of teleport control",
+        "300",
+        "teleport control",
+        ""
+      ]
+    ]
+  },
+  {
+    "headers": [
+      "Wand",
+      "Cost",
+      "Starting charges",
+      "Prob",
+      "Type"
+    ],
+    "rows": [
+      [
+        "light",
+        "100",
+        "11–15",
+        "9.5%",
+        "non-directional"
+      ],
+      [
+        "nothing",
+        "100",
+        "varies",
+        "2.5%",
+        "varies"
+      ],
+      [
+        ""
+      ],
+      [
+        "digging",
+        "150",
+        "4–8",
+        "5.5%",
+        "ray"
+      ],
+      [
+        "enlightenment",
+        "150",
+        "11–15",
+        "1.5%",
+        "non-directional"
+      ],
+      [
+        "locking",
+        "150",
+        "4–8",
+        "2.5%",
+        "beam"
+      ],
+      [
+        "magic missile",
+        "150",
+        "4–8",
+        "5%",
+        "ray"
+      ],
+      [
+        "make invisible",
+        "150",
+        "4–8",
+        "4.5%",
+        "beam"
+      ],
+      [
+        "opening",
+        "150",
+        "4–8",
+        "2.5%",
+        "beam"
+      ],
+      [
+        "probing",
+        "150",
+        "4–8",
+        "3%",
+        "beam"
+      ],
+      [
+        "secret door detection",
+        "150",
+        "11–15",
+        "5%",
+        "non-directional"
+      ],
+      [
+        "slow monster",
+        "150",
+        "4–8",
+        "5%",
+        "beam"
+      ],
+      [
+        "speed monster",
+        "150",
+        "4–8",
+        "5%",
+        "beam"
+      ],
+      [
+        "striking",
+        "150",
+        "4–8",
+        "7.5%",
+        "beam"
+      ],
+      [
+        "undead turning",
+        "150",
+        "4–8",
+        "5%",
+        "beam"
+      ],
+      [
+        ""
+      ],
+      [
+        "cold",
+        "175",
+        "4–8",
+        "4%",
+        "ray"
+      ],
+      [
+        "fire",
+        "175",
+        "4–8",
+        "4%",
+        "ray"
+      ],
+      [
+        "lightning",
+        "175",
+        "4–8",
+        "4%",
+        "ray"
+      ],
+      [
+        "sleep",
+        "175",
+        "4–8",
+        "5%",
+        "ray"
+      ],
+      [
+        ""
+      ],
+      [
+        "cancellation",
+        "200",
+        "4–8",
+        "4.5%",
+        "beam"
+      ],
+      [
+        "create monster",
+        "200",
+        "11–15",
+        "4.5%",
+        "non-directional"
+      ],
+      [
+        "polymorph",
+        "200",
+        "4–8",
+        "4.5%",
+        "beam"
+      ],
+      [
+        "teleportation",
+        "200",
+        "4–8",
+        "4.5%",
+        "beam"
+      ],
+      [
+        ""
+      ],
+      [
+        "death",
+        "500",
+        "4–8",
+        ".5%",
+        "ray"
+      ],
+      [
+        "wishing",
+        "500",
+        "1–3",
+        ".5%",
+        "non-directional"
+      ]
+    ]
+  },
+  {
+    "headers": [],
+    "rows": [
+      [
+        "identify",
+        "20",
+        "18%",
+        "14",
+        "random"
+      ],
+      [
+        "light",
+        "50",
+        "9%",
+        "8",
+        "random"
+      ],
+      [
+        "blank paper 2",
+        "60",
+        "2.8%",
+        "0",
+        "unlabeled"
+      ],
+      [
+        "enchant weapon",
+        "60",
+        "8%",
+        "16",
+        "random"
+      ],
+      [
+        "enchant armor",
+        "80",
+        "6.3%",
+        "16",
+        "random"
+      ],
+      [
+        "remove curse",
+        "80",
+        "6.5%",
+        "16",
+        "random"
+      ],
+      [
+        "confuse monster",
+        "100",
+        "5.3%",
+        "12",
+        "random"
+      ],
+      [
+        "destroy armor",
+        "100",
+        "4.5%",
+        "10",
+        "random"
+      ],
+      [
+        "fire",
+        "100",
+        "3%",
+        "8",
+        "random"
+      ],
+      [
+        "food detection",
+        "100",
+        "2.5%",
+        "8",
+        "random"
+      ],
+      [
+        "gold detection",
+        "100",
+        "3.3%",
+        "8",
+        "random"
+      ],
+      [
+        "magic mapping",
+        "100",
+        "4.5%",
+        "8",
+        "random"
+      ],
+      [
+        "scare monster",
+        "100",
+        "3.5%",
+        "20",
+        "random"
+      ],
+      [
+        "teleportation 1, 3",
+        "100",
+        "5.5%",
+        "20",
+        "random"
+      ],
+      [
+        "amnesia",
+        "200",
+        "3.5%",
+        "8",
+        "random"
+      ],
+      [
+        "create monster 1",
+        "200",
+        "4.5%",
+        "10",
+        "random"
+      ],
+      [
+        "earth 1",
+        "200",
+        "1.8%",
+        "8",
+        "random"
+      ],
+      [
+        "taming",
+        "200",
+        "1.5%",
+        "20",
+        "random"
+      ],
+      [
+        "charging",
+        "300",
+        "1.5%",
+        "16",
+        "random"
+      ],
+      [
+        "genocide",
+        "300",
+        "1.5%",
+        "30",
+        "random"
+      ],
+      [
+        "punishment",
+        "300",
+        "1.5%",
+        "10",
+        "random"
+      ],
+      [
+        "stinking cloud",
+        "300",
+        "1.5%",
+        "20",
+        "random"
+      ]
+    ]
+  },
+  {
+    "headers": [],
+    "rows": [
+      [
+        "booze",
+        "50",
+        "20",
+        "4.2%",
+        "random"
+      ],
+      [
+        "fruit juice",
+        "50",
+        "20",
+        "4.2%",
+        "random"
+      ],
+      [
+        "see invisible",
+        "50",
+        "20",
+        "4.2%",
+        "random"
+      ],
+      [
+        "sickness",
+        "50",
+        "20",
+        "4.2%",
+        "random"
+      ],
+      [
+        "confusion",
+        "100",
+        "20",
+        "4.2%",
+        "random"
+      ],
+      [
+        "extra healing",
+        "100",
+        "20",
+        "4.7%",
+        "random"
+      ],
+      [
+        "hallucination",
+        "100",
+        "20",
+        "4%",
+        "random"
+      ],
+      [
+        "healing",
+        "100",
+        "20",
+        "5.7%",
+        "random"
+      ],
+      [
+        "holy water",
+        "100",
+        "20",
+        "1.15%",
+        "clear"
+      ],
+      [
+        "unholy water",
+        "100",
+        "20",
+        "1.15%",
+        "clear"
+      ],
+      [
+        "restore ability",
+        "100",
+        "20",
+        "4%",
+        "random"
+      ],
+      [
+        "sleeping",
+        "100",
+        "20",
+        "4.2%",
+        "random"
+      ],
+      [
+        "blindness",
+        "150",
+        "20",
+        "4%",
+        "random"
+      ],
+      [
+        "gain energy",
+        "150",
+        "20",
+        "4.2%",
+        "random"
+      ],
+      [
+        "invisibility",
+        "150",
+        "20",
+        "4%",
+        "random"
+      ],
+      [
+        "monster detection",
+        "150",
+        "20",
+        "4%",
+        "random"
+      ],
+      [
+        "object detection",
+        "150",
+        "20",
+        "4.2%",
+        "random"
+      ],
+      [
+        "enlightenment",
+        "200",
+        "20",
+        "2%",
+        "random"
+      ],
+      [
+        "full healing",
+        "200",
+        "20",
+        "1%",
+        "random"
+      ],
+      [
+        "levitation",
+        "200",
+        "20",
+        "4.2%",
+        "random"
+      ],
+      [
+        "polymorph",
+        "200",
+        "20",
+        "1%",
+        "random"
+      ],
+      [
+        "speed",
+        "200",
+        "20",
+        "4.2%",
+        "random"
+      ],
+      [
+        "acid",
+        "250",
+        "20",
+        "1%",
+        "random"
+      ],
+      [
+        "oil",
+        "250",
+        "20",
+        "3%",
+        "random"
+      ],
+      [
+        "gain ability",
+        "300",
+        "20",
+        "4.2%",
+        "random"
+      ],
+      [
+        "gain level",
+        "300",
+        "20",
+        "2%",
+        "random"
+      ],
+      [
+        "paralysis",
+        "300",
+        "20",
+        "4.2%",
+        "random"
+      ]
+    ]
+  },
+  {
+    "headers": [
+      "Spellbook",
+      "Spell level",
+      "Direction",
+      "Relative probability",
+      "Probability conditional on price",
+      "Actions to read",
+      "Skillchanges"
+    ],
+    "rows": [
+      [
+        "Spellbook of force bolt",
+        "1",
+        "beam",
+        "3.5%",
+        "12.2%",
+        "4",
+        ""
+      ],
+      [
+        "Spellbook of drain life",
+        "2",
+        "beam",
+        "1.0%",
+        "4.3%",
+        "4",
+        ""
+      ],
+      [
+        "Spellbook of magic missile",
+        "2",
+        "ray",
+        "4.5%",
+        "19.1%",
+        "4",
+        ""
+      ],
+      [
+        "Spellbook of cone of cold",
+        "4",
+        "ray (distant if skilled)",
+        "1.0%",
+        "8.3%",
+        "23",
+        "S"
+      ],
+      [
+        "Spellbook of fireball",
+        "4",
+        "ray (distant if skilled)",
+        "2.0%",
+        "16.7%",
+        "14",
+        "S"
+      ],
+      [
+        "Spellbook of finger of death",
+        "7",
+        "ray",
+        "0.5%",
+        "25.0%",
+        "82",
+        ""
+      ]
+    ]
+  },
+  {
+    "headers": [
+      "Spellbook",
+      "Spell level",
+      "Direction",
+      "Relative probability",
+      "Probability conditional on price",
+      "Actions to read",
+      "Skillchanges"
+    ],
+    "rows": [
+      [
+        "Spellbook of protection",
+        "1",
+        "non-directional",
+        "1.8%",
+        "6.3%",
+        "5",
+        "E"
+      ],
+      [
+        "Spellbook of create monster",
+        "2",
+        "non-directional",
+        "3.5%",
+        "14.9%",
+        "5",
+        ""
+      ],
+      [
+        "Spellbook of remove curse",
+        "3",
+        "non-directional",
+        "2.5%",
+        "10.8%",
+        "12",
+        "S"
+      ],
+      [
+        "Spellbook of create familiar",
+        "6",
+        "non-directional",
+        "1.0%",
+        "19.6%",
+        "44",
+        ""
+      ],
+      [
+        "Spellbook of turn undead",
+        "6",
+        "beam",
+        "1.6%",
+        "31.4%",
+        "50",
+        ""
+      ]
+    ]
+  },
+  {
+    "headers": [
+      "Spellbook",
+      "Spell level",
+      "Direction",
+      "Relative probability",
+      "Probability conditional on price",
+      "Actions to read",
+      "Skillchanges"
+    ],
+    "rows": [
+      [
+        "Spellbook of detect monsters",
+        "1",
+        "non-directional",
+        "4.3%",
+        "15.0%",
+        "3",
+        "S"
+      ],
+      [
+        "Spellbook of light",
+        "1",
+        "non-directional",
+        "4.5%",
+        "15.7%",
+        "3",
+        ""
+      ],
+      [
+        "Spellbook of detect food",
+        "2",
+        "non-directional",
+        "3.0%",
+        "12.8%",
+        "5",
+        "S"
+      ],
+      [
+        "Spellbook of clairvoyance",
+        "3",
+        "non-directional",
+        "1.5%",
+        "16.5%",
+        "8",
+        "S"
+      ],
+      [
+        "Spellbook of detect unseen",
+        "3",
+        "non-directional",
+        "2.0%",
+        "8.6%",
+        "10",
+        ""
+      ],
+      [
+        "Spellbook of identify",
+        "3",
+        "non-directional",
+        "2.0%",
+        "8.6%",
+        "14",
+        "S"
+      ],
+      [
+        "Spellbook of detect treasure",
+        "4",
+        "non-directional",
+        "2.0%",
+        "16.7%",
+        "17",
+        "S"
+      ],
+      [
+        "Spellbook of magic mapping",
+        "5",
+        "non-directional",
+        "1.8%",
+        "47.4%",
+        "37",
+        ""
+      ]
+    ]
+  },
+  {
+    "headers": [
+      "Spellbook",
+      "Spell level",
+      "Direction",
+      "Relative probability",
+      "Probability conditional on price",
+      "Actions to read",
+      "Skillchanges"
+    ],
+    "rows": [
+      [
+        "Spellbook of sleep",
+        "1",
+        "ray",
+        "5.0%",
+        "17.5%",
+        "3",
+        ""
+      ],
+      [
+        "Spellbook of confuse monster",
+        "2",
+        "non-directional",
+        "3.0%",
+        "12.8%",
+        "4",
+        "S"
+      ],
+      [
+        "Spellbook of slow monster",
+        "2",
+        "beam",
+        "3.0%",
+        "12.8%",
+        "4",
+        ""
+      ],
+      [
+        "Spellbook of cause fear",
+        "3",
+        "non-directional",
+        "2.5%",
+        "10.8%",
+        "8",
+        ""
+      ],
+      [
+        "Spellbook of charm monster",
+        "3",
+        "non-directional",
+        "2.0%",
+        "8.6%",
+        "8",
+        ""
+      ]
+    ]
+  },
+  {
+    "headers": [
+      "Spellbook",
+      "Spell level",
+      "Direction",
+      "Relative probability",
+      "Probability conditional on price",
+      "Actions to read",
+      "Skillchanges"
+    ],
+    "rows": [
+      [
+        "Spellbook of jumping",
+        "1",
+        "non-directional",
+        "2.0%",
+        "7.0%",
+        "5",
+        "BSE"
+      ],
+      [
+        "Spellbook of haste self",
+        "3",
+        "non-directional",
+        "3.3%",
+        "14.2%",
+        "10",
+        "S"
+      ],
+      [
+        "Spellbook of invisibility",
+        "4",
+        "non-directional",
+        "2.5%",
+        "20.8%",
+        "17",
+        ""
+      ],
+      [
+        "Spellbook of levitation",
+        "4",
+        "non-directional",
+        "2.0%",
+        "16.7%",
+        "14",
+        "S"
+      ],
+      [
+        "Spellbook of teleport away",
+        "6",
+        "beam",
+        "1.5%",
+        "29.4%",
+        "38",
+        ""
+      ]
+    ]
+  },
+  {
+    "headers": [
+      "Spellbook",
+      "Spell level",
+      "Direction",
+      "Relative probability",
+      "Probability conditional on price",
+      "Actions to read",
+      "Skillchanges"
+    ],
+    "rows": [
+      [
+        "Spellbook of healing",
+        "1",
+        "beam",
+        "4.0%",
+        "14.0%",
+        "4",
+        "S"
+      ],
+      [
+        "Spellbook of cure blindness",
+        "2",
+        "non-directional",
+        "2.5%",
+        "10.6%",
+        "4",
+        ""
+      ],
+      [
+        "Spellbook of cure sickness",
+        "3",
+        "non-directional",
+        "3.2%",
+        "13.8%",
+        "8",
+        ""
+      ],
+      [
+        "Spellbook of extra healing",
+        "3",
+        "beam",
+        "2.7%",
+        "11.6%",
+        "12",
+        ""
+      ],
+      [
+        "Spellbook of stone to flesh",
+        "3",
+        "beam",
+        "1.5%",
+        "6.5%",
+        "4",
+        ""
+      ],
+      [
+        "Spellbook of restore ability",
+        "4",
+        "non-directional",
+        "2.5%",
+        "20.8%",
+        "17",
+        "S"
+      ]
+    ]
+  },
+  {
+    "headers": [
+      "Spellbook",
+      "Spell level",
+      "Direction",
+      "Relative probability",
+      "Probability conditional on price",
+      "Actions to read",
+      "Skillchanges"
+    ],
+    "rows": [
+      [
+        "Spellbook of knock",
+        "1",
+        "beam",
+        "3.5%",
+        "12.2%",
+        "3",
+        ""
+      ],
+      [
+        "Spellbook of wizard lock",
+        "2",
+        "beam",
+        "3.0%",
+        "12.8%",
+        "5",
+        ""
+      ],
+      [
+        "Spellbook of dig",
+        "5",
+        "ray",
+        "2.0%",
+        "52.6%",
+        "32",
+        ""
+      ],
+      [
+        "Spellbook of polymorph",
+        "6",
+        "beam",
+        "1.0%",
+        "19.6%",
+        "50",
+        ""
+      ],
+      [
+        "Spellbook of cancellation",
+        "7",
+        "beam",
+        "1.5%",
+        "75.0%",
+        "66",
+        ""
+      ]
+    ]
+  }
+]
