@@ -1,6 +1,8 @@
 from pyswip import Prolog
 from pathlib import Path
 from utility import a_star, Simboli_unici, SymbolToPos, save, load, ascii_to_idx
+import os
+import time
 
 class AgentNetHack:
     def load(self):
@@ -60,6 +62,7 @@ class AgentNetHack:
         self.prolog.consult("kb.pl")
         self.unknow = set()
         self.explored = {}
+        self.goals = None
 
     def goal(self):
         arr = Simboli_unici()
@@ -184,19 +187,15 @@ class AgentNetHack:
                 print(f"fun is_walkable: New object to discover {chr(code)} {code} {color}")
             return True  # initially consider it walkable
         else:
-            print(f"debug cord x:{x} y{y}: ({code},{color}) {results[0]["X"]}")
             return results[0]["X"] == 'true'
         
 
     def neighbors(self, x, y, env):
-        print(f"Debug neighbors ({x},{y}) ")
         result = []
         for dx, dy in [(-1,0), (1,0), (0,-1), (0,1), (1,1), (1,-1), (-1,1), (-1,-1)]:
             nx, ny = x + dx, y + dy
             results = list(self.prolog.query(f"moveInvalid(({x},{y}), ({nx},{ny}), X)"))
-            print(f"Debug vicino non valido ({x},{y}) to ({nx},{ny}) {results} ")
             if len(results)>0:
-                print(f"Debug vicino non valido ({x},{y}) to ({nx},{ny}) ")
                 continue
             
             if 0 <= nx < self.width and 0 <= ny < self.height:
@@ -247,19 +246,24 @@ class AgentNetHack:
 
     def move(self, goal=None):
         start = (self.pos[0], self.pos[1]+1)
+        #os.system('clear')  # Pulisce il terminale
         self.env.render()
-        goals = SymbolToPos(self.obs, self.prolog, self.explored)
+        #time.sleep(0.5)  # Aspetta un po' per vedere il frame
+        self.goals = SymbolToPos(self.obs, self.prolog, self.explored, self.goals)
 
         #print(goals)
-        if goals[0][2] >= 6:
+        path = None
+        if self.goals[0][2] >= 6:
             print("Hahaha mostro")
+
         else:
 
-            goal = goals[0][1]
+            goal = self.goals[0][1]
             path = a_star(start, goal, self, self.obs)
             print (f"fun move: goal path: {path}")
         obj={}
-
+        if path is None:
+            return
         for step in path[1:]:
             start = (self.pos[0], self.pos[1]+1)
             self.explored[step]=1
@@ -268,32 +272,55 @@ class AgentNetHack:
             obj['color']=self.obs['tty_colors'][step[1]][step[0]]
 
             results = list(self.prolog.query(f"is_known(Y,({obj['code']},{obj['color']}), X)"))
+            cmdlist = [ascii_to_idx('o'), ascii_to_idx('c')]
             print(f"Debug sono (start {start}) ({self.pos[0]},{self.pos[1]+1}) vado in ({step}) symbol: {chr(obj['code'])} ({obj['code']}, {obj['color']}), results {results}")
-            if len(results)==0 or (len(results)>0 and results[0].get('X', 'true') == 'true'):
-                if step == goal:
-                    cmd= ascii_to_idx('o') if len(results)==0 else results[0].get('Y', ascii_to_idx('o'))
-                    print("sono accanto al goal")
-                    self.obs, reward, terminal, truncated, info = self.env.step(cmd)
-                    self.env.render()
-                    cmd1 = self.move_to(start, step)  # direction
-                    print(f"Debug door {cmd1} {chr(obj['code'])}")
-                    self.obs, reward, terminal, truncated, info = self.env.step(cmd1)
-                    self.env.render()
-                else:
-                    cmd = self.move_to(start, step) 
+            if type(cmdlist) != list:
+                cmdlist = [cmdlist]
 
-
+            if len(results) == len(cmdlist):
+                tmpcmd = cmdlist
+                for i in results:
+                    if i.get('X')== 'false' and i.get('Y') in tmpcmd:
+                        tmpcmd.remove(i.get('Y'))
             else:
-                cmd = self.move_to(start, step)  # esegui lo spostamento logico/fisico
-            self.obs, reward, terminal, truncated, info = self.env.step(cmd)
-            if terminal or truncated:
-                print(f"bravo {reward}")
-                return
-            self.env.render()
-            if self.observe_and_update(step, cmd=cmd, obj=obj):  # aggiorna KB con nuove info
-                print("nuovo goal")
-                self.move()
-                return           
+                tmpcmd=cmdlist
+                for i in results:
+                    if i.get('Y') in tmpcmd:
+                        tmpcmd.remove(i.get('Y'))
+
+            print("AZIONE APPLICATA A :")
+            print(tmpcmd, obj['code'], obj['color'])
+            #if len(results)==0 or (len(results)>0 and results[0].get('X', 'true') == 'true'):
+            if step == goal:
+
+                print("sono accanto al goal")
+                for cmd in tmpcmd:
+                    self.obs, reward, terminal, truncated, info = self.env.step(cmd)
+                    #os.system('clear')  # Pulisce il terminale
+                    self.env.render()
+                    #time.sleep(0.5)  # Aspetta un po' per vedere il frame
+                    cmd1 = self.move_to(start, step)  # direction
+                    self.obs, reward, terminal, truncated, info = self.env.step(cmd1)
+                    #os.system('clear')  # Pulisce il terminale
+                    self.env.render()
+                    #time.sleep(0.5)  # Aspetta un po' per vedere il frame
+            else:
+                cmd = self.move_to(start, step)
+
+
+        else:
+            cmd = self.move_to(start, step)  # esegui lo spostamento logico/fisico
+        self.obs, reward, terminal, truncated, info = self.env.step(cmd)
+        if terminal or truncated:
+            print(f"bravo {reward}")
+            return
+        #os.system('clear')  # Pulisce il terminale
+        self.env.render()
+        #time.sleep(0.5)  # Aspetta un po' per vedere il frame
+        if self.observe_and_update(step, cmd=cmd, obj=obj):  # aggiorna KB con nuove info
+            print("nuovo goal")
+            self.move()
+            return
         self.move()
         return
         print (f"search a goal")
@@ -316,7 +343,9 @@ class AgentNetHack:
             else:
                 cmd = self.move_to(start, step)  # esegui lo spostamento logico/fisico
                 obs, reward, terminal, truncated, info = self.env.step(cmd)
+                #os.system('clear')  # Pulisce il terminale
                 self.env.render()
+                #time.sleep(0.5)  # Aspetta un po' per vedere il frame
             if self.observe_and_update(step, obs, cmd):  # aggiorna KB con nuove info
                 print("nuovo goal")
                 self.move()
@@ -394,7 +423,6 @@ class AgentNetHack:
 
         else:
             results = list(self.prolog.query(f"is_known({cmd},({code},{color}), X)"))
-            print(f"Debug: {cmd}, {code}, {color},  {len(results)}")
             if len(results)==0:
 
                 results = list(self.prolog.query(f"command({cmd},({code},{color}), X)"))
@@ -413,7 +441,6 @@ class AgentNetHack:
 
                 obscode = tty_chars[step[1]][step[0]]
                 obscolor = tty_colors[step[1]][step[0]]
-                print(f"Debug: {color}, {obscolor}, {code},  {obscode}")
                 if ((color!=obscolor) or (code!=obscode)):
                     print(f"Debug: new")
                     self.prolog.assertz(f"is_known({cmd},({code},{color}), true)")

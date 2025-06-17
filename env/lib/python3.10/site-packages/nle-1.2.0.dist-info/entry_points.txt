@@ -1,0 +1,6 @@
+[console_scripts]
+nle-play = nle.scripts.play:main
+nle-read-tty = nle.scripts.read_tty:main
+nle-ttyplay = nle.scripts.ttyplay:main
+nle-ttyplay2 = nle.scripts.ttyplay2:main
+nle-ttyrec = nle.scripts.ttyrec:main

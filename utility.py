@@ -197,7 +197,7 @@ def Simboli_unici(observation):
         print(f"{color_code}{char:^8}{Style.RESET_ALL} | {code:^6} | {color:^6}")
     return symbols
 
-def SymbolToPos(Map, prolog, dict):
+def SymbolToPos(Map, prolog, dict, oldGoal= None):
     arr=[]
 
     tty_chars=Map['tty_chars']
@@ -217,6 +217,12 @@ def SymbolToPos(Map, prolog, dict):
                 continue
             code =tty_chars[y][x].item()
             color = tty_colors[y][x].item()
+
+            if oldGoal is not None:
+                esiste = any(elem[1:2] == ((x,y)) for elem in oldGoal)
+                if esiste == True:
+                    #print(f"Esistono duplicati di {code} {color}, {x} {y}")
+                    continue
             if (color==0 or (chr(code)=='@' and color==15)):
                 continue
             results = list(prolog.query(f"is_monster(({code},{color}), X)"))
@@ -236,7 +242,7 @@ def SymbolToPos(Map, prolog, dict):
                 arr.append(((code,color),(x,y+1),1))
     
     Simboli_unici(Map)
-    print("-----------SymbolToPos-----------")
-    print(sorted(arr, key=lambda x: x[2], reverse= True))
+    """print("-----------SymbolToPos-----------")
+    print(sorted(arr, key=lambda x: x[2], reverse= True))"""
     return sorted(arr, key=lambda x: x[2], reverse= True)
             
