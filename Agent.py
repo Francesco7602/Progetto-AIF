@@ -62,7 +62,8 @@ class AgentNetHack:
         self.prolog.consult("kb.pl")
         self.unknow = set()
         self.explored = {}
-        self.goals = None
+        self.goals = []
+        self.turni=0
 
     def goal(self):
         arr = Simboli_unici()
@@ -245,11 +246,17 @@ class AgentNetHack:
 
 
     def move(self, goal=None):
+        self.turni+=1
         start = (self.pos[0], self.pos[1]+1)
         #os.system('clear')  # Pulisce il terminale
         self.env.render()
         #time.sleep(0.5)  # Aspetta un po' per vedere il frame
-        self.goals = SymbolToPos(self.obs, self.prolog, self.explored, self.goals)
+        #self.goals = SymbolToPos(self.obs, self.prolog, self.explored, self.goals)
+        self.goals = SymbolToPos(self.obs, self.prolog, self.explored, self.goals, self.turni)
+
+
+        #print("GOALLIST")
+        #print(self.goals)
 
         #print(goals)
         path = None
@@ -273,7 +280,8 @@ class AgentNetHack:
 
             results = list(self.prolog.query(f"is_known(Y,({obj['code']},{obj['color']}), X)"))
             cmdlist = [ascii_to_idx('o'), ascii_to_idx('c')]
-            print(f"Debug sono (start {start}) ({self.pos[0]},{self.pos[1]+1}) vado in ({step}) symbol: {chr(obj['code'])} ({obj['code']}, {obj['color']}), results {results}")
+
+            #print(f"Debug sono (start {start}) ({self.pos[0]},{self.pos[1]+1}) vado in ({step}) symbol: {chr(obj['code'])} ({obj['code']}, {obj['color']}), results {results}")
             if type(cmdlist) != list:
                 cmdlist = [cmdlist]
 
@@ -288,79 +296,48 @@ class AgentNetHack:
                     if i.get('Y') in tmpcmd:
                         tmpcmd.remove(i.get('Y'))
 
-            print("AZIONE APPLICATA A :")
-            print(tmpcmd, obj['code'], obj['color'])
+            #print("AZIONE APPLICATA A :")
+            #print(f"debug {tmpcmd, obj['code'], obj['color']}")
             #if len(results)==0 or (len(results)>0 and results[0].get('X', 'true') == 'true'):
             if step == goal:
 
                 print("sono accanto al goal")
+                if len(tmpcmd)==0:#se non sai che fare, cerca un altro goal
+                    print("nuovo goal")
+                    self.move()
+                    return
                 for cmd in tmpcmd:
                     self.obs, reward, terminal, truncated, info = self.env.step(cmd)
                     #os.system('clear')  # Pulisce il terminale
-                    self.env.render()
+                    #self.env.render()
                     #time.sleep(0.5)  # Aspetta un po' per vedere il frame
                     cmd1 = self.move_to(start, step)  # direction
                     self.obs, reward, terminal, truncated, info = self.env.step(cmd1)
                     #os.system('clear')  # Pulisce il terminale
-                    self.env.render()
+                    #self.env.render()
                     #time.sleep(0.5)  # Aspetta un po' per vedere il frame
+                    self.observe_and_update(step, cmd=cmd, obj=obj)
+
             else:
                 cmd = self.move_to(start, step)
+                self.obs, reward, terminal, truncated, info = self.env.step(cmd)
+                #self.env.render()
 
 
-        else:
-            cmd = self.move_to(start, step)  # esegui lo spostamento logico/fisico
-        self.obs, reward, terminal, truncated, info = self.env.step(cmd)
-        if terminal or truncated:
-            print(f"bravo {reward}")
-            return
-        #os.system('clear')  # Pulisce il terminale
-        self.env.render()
-        #time.sleep(0.5)  # Aspetta un po' per vedere il frame
-        if self.observe_and_update(step, cmd=cmd, obj=obj):  # aggiorna KB con nuove info
-            print("nuovo goal")
-            self.move()
-            return
-        self.move()
-        return
-        print (f"search a goal")
-        if not goal:
-            x, y, ob = self.goal(self.obs, cur_goal = None)
-            goal = (x,y+1)
-        start = (self.pos[0], self.pos[1]+1)
-        print (f"fun move: goal: {self.start} -> {goal}")
-        #print(f"start posizione mappa {self.pos} start")
-        path = a_star(start, goal, self)
-        print (f"fun move: goal path: {path}")
 
-        if path is None:
-            print("No path found.")
-            return False  # movimento fallito
+            #    cmd = self.move_to(start, step)  # esegui lo spostamento logico/fisico
+            #self.obs, reward, terminal, truncated, info = self.env.step(cmd)
+            #else:
+            if terminal or truncated:
+                print(f"bravo {reward}")
+                return
+            #os.system('clear')  # Pulisce il terminale
 
-        for step in path[1:]:
-            if step == goal:
-                print("sono accanto al goal")
-            else:
-                cmd = self.move_to(start, step)  # esegui lo spostamento logico/fisico
-                obs, reward, terminal, truncated, info = self.env.step(cmd)
-                #os.system('clear')  # Pulisce il terminale
-                self.env.render()
-                #time.sleep(0.5)  # Aspetta un po' per vedere il frame
-            if self.observe_and_update(step, obs, cmd):  # aggiorna KB con nuove info
+            #time.sleep(0.5)  # Aspetta un po' per vedere il frame
+            if self.observe_and_update(step, cmd=cmd, obj=obj):  # aggiorna KB con nuove info
                 print("nuovo goal")
                 self.move()
-                print("fine nuovo goal")
                 return
-            xp, yp = self.pos
-            start = (xp, yp+1)
-
-
-            #if self.check_environment_change(step, goal, obs):
-            #    print("Environment changed, recalculating path...")
-            #    return self.move(step, self.select_new_goal(env), env)  # ricorsione
-        print("goal raggiunto")
-        return True  # goal raggiunto
-
 
     def observe_and_update(self, step, cmd=None, obj=None):
         blstats = self.obs["blstats"]

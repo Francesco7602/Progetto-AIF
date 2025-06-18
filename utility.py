@@ -197,7 +197,7 @@ def Simboli_unici(observation):
         print(f"{color_code}{char:^8}{Style.RESET_ALL} | {code:^6} | {color:^6}")
     return symbols
 
-def SymbolToPos(Map, prolog, dict, oldGoal= None):
+def SymbolToPos(Map, prolog, dict, oldGoal= [], turni= 1):
     arr=[]
 
     tty_chars=Map['tty_chars']
@@ -228,21 +228,23 @@ def SymbolToPos(Map, prolog, dict, oldGoal= None):
             results = list(prolog.query(f"is_monster(({code},{color}), X)"))
             if len(results)>0:
                 danger = int(results[0]['X'])
-                arr.append(((code,color),(x,y+1),6+danger))
+                arr.append(((code,color),(x,y+1),6+danger+turni/200))
                 continue
             results = list(prolog.query(f"walkable(({code},{color}), X)"))
             if len(results)>0:
                 if results[0]['X']=='true':
-                    arr.append(((code,color),(x,y+1),0))
+                    arr.append(((code,color),(x,y+1),0+turni/200))
                     continue
             results = list(prolog.query(f"is_known(Y,({code},{color}), X)"))
             if len(results)==0:
-                arr.append(((code,color),(x,y+1),5))
+                arr.append(((code,color),(x,y+1),5+turni/200))
             elif int(results[0]['Y'])==57: #is open
-                arr.append(((code,color),(x,y+1),1))
-    
+                arr.append(((code,color),(x,y+1),1+turni/200))
+
+
     Simboli_unici(Map)
+    combined = arr + oldGoal
     """print("-----------SymbolToPos-----------")
     print(sorted(arr, key=lambda x: x[2], reverse= True))"""
-    return sorted(arr, key=lambda x: x[2], reverse= True)
+    return sorted(combined, key=lambda x: x[2], reverse= True)
             
