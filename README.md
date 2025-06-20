@@ -52,3 +52,7 @@ e.g. MCTS. They highly synergize with the topics of the course
 Agenti che salvano civili in un ambiente post-disastro (tipo simulazione robotica).
 potresti dare batteria agli agenti, tempistiche di salvataggio, eventi improvvisi o cose così.
 Da sciullapre bene
+
+
+
+COMODO PER GENERARE MAPPE --> https://minihack-editor.github.io/
