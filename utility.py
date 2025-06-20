@@ -2,6 +2,7 @@ from pyswip import Prolog
 from nle.nethack import actions
 from colorama import Fore, Style, init
 import numpy as np
+import re
 
 init(autoreset=True)  # Così i colori si resettano ad ogni stampa
 
@@ -29,7 +30,7 @@ nethack_to_colorama = {
 def save(pred, name, prolog):
     stringa=""
     results = list(prolog.query(pred))
-    print(f"{name} {pred} {results}")
+    #print(f"{name} {pred} {results}")
     for item in results:
         stringa+=name+"("
         for key in item:
@@ -155,15 +156,17 @@ def print_stats(observation):
 def print_inventory(obs):
     inv_letters = obs["inv_letters"]
     inv_strs = obs["inv_strs"]
-
+    array = []
     print("Inventario:")
     for idx, c in enumerate(inv_letters):
         if c != 0:
             letter = chr(c)
             # Ogni inv_str è una lista di codici ASCII: convertiamola in stringa
             obj_name = "".join([chr(x) for x in inv_strs[idx] if x != 0]).strip()
+            array.append(f"  {letter}: {obj_name}")
             print(f"  {letter}: {obj_name}")
     print()
+    return array
 
 
 
@@ -247,4 +250,23 @@ def SymbolToPos(Map, prolog, dict, oldGoal= [], turni= 1):
     """print("-----------SymbolToPos-----------")
     print(sorted(arr, key=lambda x: x[2], reverse= True))"""
     return sorted(combined, key=lambda x: x[2], reverse= True)
-            
+
+def inventoryToProlog(list, prolog):
+    for line in list:
+        match = re.search(r"([a-z]): (an?|[\d]+)? ?(blessed|uncursed|cursed)? ?(\+\d+)? ?(.*?)( \((.*?)\))?$", line)
+        if match:
+            id, article, state, bonus, obj, _, note = match.groups()
+            try:
+                quantity = int(article)
+            except:
+                quantity = 1
+            """print({
+                "id": id,
+                "object": obj,
+                "state": state,
+                "bonus": bonus,
+                "quantity": quantity,
+                "note": note,
+            })"""
+            flag = "false" if note is None else "true"
+            prolog.assertz(f"has({obj}, {state}, {quantity}, {bonus}, {flag}, {id})")

@@ -352,7 +352,7 @@ class AgentNetHack:
                 print(f"insert moveInvalid {self.pos[0]}, {self.pos[1]+1} to ({step[0]},{step[1]})")
                 self.explored[step]=0
                 return True
-            results = list(self.prolog.query(f"is_known(0,({code},{color}), X)"))
+            results = list(self.prolog.query(f"is_known(0,({code},{color}), X)")) #e possibile camminarci sopra
             if len(results)==0:
                 results = list(self.prolog.query(f"command(0,({code},{color}), X)"))
                 if (self.pos == (blstats[0].item(), blstats[1].item())):
