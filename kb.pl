@@ -15,6 +15,7 @@
 :- dynamic is_useful/4.
 :- dynamic is_monster/2.
 :- dynamic moveInvalid/3.
+:- dynamic winner/2.
 
 
 healthy :-

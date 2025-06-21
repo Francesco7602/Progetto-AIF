@@ -17,6 +17,7 @@ class AgentNetHack:
         arr.append("is_known(X,Y,Z)")
         arr.append("is_useful(X,Y,V,Z)")
         arr.append("is_monster(X,Y)")
+        arr.append("winner(X,Y)")
         with open("memory", "w") as f:
             for e in arr:
                 str = e.split("(")
@@ -66,7 +67,54 @@ class AgentNetHack:
         self.turni=0
 
     def goal(self):
-        arr = Simboli_unici()
+        arr=[]
+
+        tty_chars=self.obs['tty_chars']
+        tty_colors=self.obs['tty_colors']
+
+        # Remove the useless row
+        height = len(tty_chars)
+        tty_chars = tty_chars[1:height-2]
+        tty_colors = tty_colors[1:height-2]
+
+        height = len(tty_chars)
+        width = len(tty_chars[0])
+
+        for y in range(height):
+            for x in range(width):
+                
+                results = list(self.prolog.query(f"is_monster(({code},{color}), X)"))
+                if len(results)>0:
+                    self.explored[(x,y+1)]=0
+                    
+
+                if self.explored.get((x, y+1), 0) == 1:
+                    continue
+                code =tty_chars[y][x].item()
+                color = tty_colors[y][x].item()
+
+                if oldGoal is not None:
+                    esiste = any(elem[1:2] == ((x,y)) for elem in oldGoal)
+                    if esiste == True:
+                        #print(f"Esistono duplicati di {code} {color}, {x} {y}")
+                        continue
+                if (color==0 or (chr(code)=='@' and color==15)):
+                    continue
+                results = list(prolog.query(f"is_monster(({code},{color}), X)"))
+                if len(results)>0:
+                    danger = int(results[0]['X'])
+                    arr.append(((code,color),(x,y+1),6+danger+turni/200))
+                    continue
+                results = list(prolog.query(f"walkable(({code},{color}), X)"))
+                if len(results)>0:
+                    if results[0]['X']=='true':
+                        arr.append(((code,color),(x,y+1),0+turni/200))
+                        continue
+                results = list(prolog.query(f"is_known(Y,({code},{color}), X)"))
+                if len(results)==0:
+                    arr.append(((code,color),(x,y+1),5+turni/200))
+                elif int(results[0]['Y'])==57: #is open
+                    arr.append(((code,color),(x,y+1),1+turni/200))
 
 
 
@@ -260,7 +308,7 @@ class AgentNetHack:
 
         #print(goals)
         path = None
-        if self.goals[0][2] >= 6:
+        if self.goals[0][2] >= 6 and self.goals[0][2] < 100:
             print("Hahaha mostro")
 
         else:
@@ -281,11 +329,11 @@ class AgentNetHack:
             results = list(self.prolog.query(f"is_known(Y,({obj['code']},{obj['color']}), X)"))
             cmdlist = [ascii_to_idx('o'), ascii_to_idx('c')]
 
-            #print(f"Debug sono (start {start}) ({self.pos[0]},{self.pos[1]+1}) vado in ({step}) symbol: {chr(obj['code'])} ({obj['code']}, {obj['color']}), results {results}")
+            print(f"Debug sono (start {start}) ({self.pos[0]},{self.pos[1]+1}) vado in ({step}) symbol: {chr(obj['code'])} ({obj['code']}, {obj['color']}), results {results}")
             if type(cmdlist) != list:
                 cmdlist = [cmdlist]
 
-            if len(results) == len(cmdlist):
+            if len(results) == len(cmdlist)+1:
                 tmpcmd = cmdlist
                 for i in results:
                     if i.get('X')== 'false' and i.get('Y') in tmpcmd:
@@ -302,10 +350,15 @@ class AgentNetHack:
             if step == goal:
 
                 print("sono accanto al goal")
-                if len(tmpcmd)==0:#se non sai che fare, cerca un altro goal
+                results = list(self.prolog.query(f"walkable(({obj['code']}, {obj['color']}), X)"))
+                walkable = False if len(results)>0 and results[0]['X']=="false" else True
+                if len(tmpcmd)==0:# and not walkable:#se non sai che fare, cerca un altro goal
                     print("nuovo goal")
                     self.move()
                     return
+                #elif len(tmpcmd)==0:
+                #    self.move()
+                #    return
                 for cmd in tmpcmd:
                     self.obs, reward, terminal, truncated, info = self.env.step(cmd)
                     #os.system('clear')  # Pulisce il terminale
@@ -317,6 +370,7 @@ class AgentNetHack:
                     #self.env.render()
                     #time.sleep(0.5)  # Aspetta un po' per vedere il frame
                     self.observe_and_update(step, cmd=cmd, obj=obj)
+                    
 
             else:
                 cmd = self.move_to(start, step)
@@ -329,7 +383,12 @@ class AgentNetHack:
             #self.obs, reward, terminal, truncated, info = self.env.step(cmd)
             #else:
             if terminal or truncated:
-                print(f"bravo {reward}")
+                if reward >0.5:
+                    results = list(self.prolog.query(f"winner({obj['code']}, {obj['color']})"))
+                    if len(results)==0:
+                        self.prolog.assertz(f"winner({obj['code']}, {obj['color']})")
+                print(f"bravo {reward} {type(reward)}")
+
                 return
             #os.system('clear')  # Pulisce il terminale
 
@@ -338,6 +397,10 @@ class AgentNetHack:
                 print("nuovo goal")
                 self.move()
                 return
+            elif step == goal:
+                self.move()
+                return
+
 
     def observe_and_update(self, step, cmd=None, obj=None):
         blstats = self.obs["blstats"]
@@ -351,7 +414,7 @@ class AgentNetHack:
                 self.prolog.assertz(f"moveInvalid(({self.pos[0]},{self.pos[1]+1}), ({step[0]},{step[1]}), 10)")
                 print(f"insert moveInvalid {self.pos[0]}, {self.pos[1]+1} to ({step[0]},{step[1]})")
                 self.explored[step]=0
-                return True
+                #return True
             results = list(self.prolog.query(f"is_known(0,({code},{color}), X)")) #e possibile camminarci sopra
             if len(results)==0:
                 results = list(self.prolog.query(f"command(0,({code},{color}), X)"))
@@ -367,7 +430,7 @@ class AgentNetHack:
                         self.prolog.assertz(f"command(0,({code},{color}), {cont+1})")
                     if cont>5:
                         self.prolog.assertz(f"walkable(({code},{color}), false)")
-                        self.prolog.assertz(f"is_known(0,({code},{color}), true)")
+                        self.prolog.assertz(f"is_known(0,({code},{color}), false)")
                         list(self.prolog.query(f"retractall(command(0,({code},{color}), _))"))
                         
                     return True
@@ -375,6 +438,7 @@ class AgentNetHack:
                     self.prolog.assertz(f"walkable(({code},{color}), true)")
                     self.prolog.assertz(f"is_known(0,({code},{color}), true)")
                     list(self.prolog.query(f"retractall(command(0,({code},{color}), _))"))
+                    return False
             else:
                 diff = self.hp[0]-blstats[10]
                 results = list(self.prolog.query(f"risk_zone_symbol(({code},{color}), X)"))

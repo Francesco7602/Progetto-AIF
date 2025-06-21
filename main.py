@@ -9,7 +9,7 @@ import re
 level = minihack.LevelGenerator()
 
 # Percorso al tuo file .des
-des_file = "dat/personal.des"
+des_file = "dat/closed_door.des"
 
 # Leggi il contenuto del file .des
 with open(des_file, "r") as f:

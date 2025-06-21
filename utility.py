@@ -226,8 +226,12 @@ def SymbolToPos(Map, prolog, dict, oldGoal= [], turni= 1):
                 if esiste == True:
                     #print(f"Esistono duplicati di {code} {color}, {x} {y}")
                     continue
+            
             if (color==0 or (chr(code)=='@' and color==15)):
                 continue
+            results = list(prolog.query(f"winner({code}, {color})"))
+            if len(results)>0:
+                arr.append(((code,color),(x,y+1),100))
             results = list(prolog.query(f"is_monster(({code},{color}), X)"))
             if len(results)>0:
                 danger = int(results[0]['X'])
