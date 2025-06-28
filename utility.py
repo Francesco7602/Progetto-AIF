@@ -200,7 +200,7 @@ def Simboli_unici(observation):
         print(f"{color_code}{char:^8}{Style.RESET_ALL} | {code:^6} | {color:^6}")
     return symbols
 
-def SymbolToPos(Map, prolog, dict, oldGoal= [], turni= 1):
+def SymbolToPos(Map, prolog, dict, oldGoal= [], turni= 1):#todo levare questa funzione
     arr=[]
 
     tty_chars=Map['tty_chars']

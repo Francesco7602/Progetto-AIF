@@ -68,6 +68,12 @@ class AgentNetHack:
 
     def goal(self):
         arr=[]
+        """
+        Quando ritorni la lista di goal, torna pure le azioni consigliate su tutti o il primo
+        cosi quando vedi una porta aperta gli dici di attraversarla
+        
+        """
+
 
         tty_chars=self.obs['tty_chars']
         tty_colors=self.obs['tty_colors']
@@ -118,58 +124,7 @@ class AgentNetHack:
 
 
 
-    #    
-    #    if cur_goal:
-    #        return cur_goal
-    #    tty_chars = obs["tty_chars"]
-    #    tty_colors = obs["tty_colors"]
-#
-    #    goal = set()
-    #    map = set()
-#
-    #    height = len(tty_chars)
-    #    width = len(tty_chars[0])
-#
-    #    for y in range(height):
-    #        for x in range(width):
-    #            code = tty_chars[y][x]
-    #            char = chr(tty_chars[y][x])
-    #            color = tty_colors[y][x]
-    #            #if color == 7 and char in '.':
-    #            #if char not in ['|', '-'] or (char=='+' and color == 3):
-    #            
-    #            #print (f"search in KB {code} {color}")
-    #            results=list(self.prolog.query(f"walkable(({code},{color}), X)"))
-    #            if len(results)==0 and (code, color) not in self.unknow:
-    #                self.unknow.add((code, color))
-    #                print (f"Nuovo oggetto da scoprire {char} {code} {color}")
-    #            elif ((code, color) not in self.unknow) and results[0]['X']=='true':
-    #                map.add((y, x))
-    #            
-    #            if color == 3 and (char == '+' or char == '-' or char == '|'):
-    #                print(f"questa è una porta: {char}, {color}")
-    #                goal.add((x,y-1, '+'))
-#
-    #    for y, x in map:
-    #        #if chr(tty_chars[y][x]) == '.':
-#
-    #        vicini = [(y+dy, x+dx) for dy, dx in [(-1,0), (1,0), (0,-1), (0,1)]]
-    #        count = sum((ny, nx) in map and chr(tty_chars[ny][nx]) not in ['|', '-'] for ny, nx in vicini)
-    #        if count == 1:
-    #            goal.add((x,y-1, '.'))
-    #        if count == 0:
-    #            vicini = [(y+dy, x+dx) for dy, dx in [(1,1), (1,-1), (-1,1), (-1,-1)]]
-    #            count = sum((ny, nx) in map and chr(tty_chars[ny][nx]) not in ['|', '-'] for ny, nx in vicini)
-    #            if count == 1:
-    #                goal.add((x,y-1, '.'))           
-#
-    #    print("------ Goal ------")
-    #    for g in sorted(goal):
-    #        print(g)
-#
-    #    return goal.pop()
-    #
-    #
+
     def move_to(self, pos_cur, pos_prox):
         x, y = pos_cur
         x_goal, y_goal = pos_prox
@@ -253,44 +208,7 @@ class AgentNetHack:
                     result.append((nx, ny))
         return result
 
-    #def move(self):
-    #    
-    #    x, y, ob = self.goal(self.obs, cur_goal = None)
-    #    curr = (x, y, ob)
-    #    print (f"fun move: goal: {self.pos} -> {curr}")
-    #    goal = (x,y+1)
-    #    xp, yp = self.pos
-    #    start = (xp, yp+1)
-    #    print(f"start posizione mappa {self.pos} start")
-    #    path = a_star(start, goal, self, self.obs)
-    #    print (f"fun move: goal path: {path}")
-    #    
-#
-    #    if path is None:
-    #        print("No path found.")
-    #        return False  # movimento fallito
-#
-    #    for step in path[1:]:  # salta il primo (start)
-    #        if step == goal:
-    #            cmd
-    #        cmd = self.move_to(start, step)  # esegui lo spostamento logico/fisico
-    #        print(f"Sono in {start} e vado in {step} e faccio cmd:{cmd}")
-    #        obs, reward, done, truncated, info = self.env.step(cmd)
-    #        render(obs)
-    #        if self.observe_and_update(step, obs, cmd):  # aggiorna KB con nuove info
-    #            print("nuovo goal")
-    #            self.move()
-    #            print("fine nuovo goal")
-    #            return
-    #        xp, yp = self.pos
-    #        start = (xp, yp+1)
-#
-#
-    #        #if self.check_environment_change(step, goal, obs):
-    #        #    print("Environment changed, recalculating path...")
-    #        #    return self.move(step, self.select_new_goal(env), env)  # ricorsione
-    #    print("goal raggiunto")
-    #    return True  # goal raggiunto
+
 
 
     def move(self, goal=None):
@@ -303,8 +221,8 @@ class AgentNetHack:
         self.goals = SymbolToPos(self.obs, self.prolog, self.explored, self.goals, self.turni)
 
 
-        #print("GOALLIST")
-        #print(self.goals)
+        print("GOALLIST")
+        print(self.goals[:10])
 
         #print(goals)
         path = None
@@ -317,8 +235,10 @@ class AgentNetHack:
             path = a_star(start, goal, self, self.obs)
             print (f"fun move: goal path: {path}")
         obj={}
-        if path is None:
-            return
+        if path is None:#perche cazz torna none
+            #return#
+            goal = self.goals[1][1]
+            path = a_star(start, goal, self, self.obs)
         for step in path[1:]:
             start = (self.pos[0], self.pos[1]+1)
             self.explored[step]=1
@@ -353,6 +273,21 @@ class AgentNetHack:
                 results = list(self.prolog.query(f"walkable(({obj['code']}, {obj['color']}), X)"))
                 walkable = False if len(results)>0 and results[0]['X']=="false" else True
                 if len(tmpcmd)==0:# and not walkable:#se non sai che fare, cerca un altro goal
+                    if walkable:
+                        cmd = self.move_to(start, step)
+                        self.obs, reward, terminal, truncated, info = self.env.step(cmd)
+                        if terminal or truncated:
+                            if reward > 0.5:
+                                results = list(self.prolog.query(f"winner({obj['code']}, {obj['color']})"))
+                                if len(results) == 0:
+                                    self.prolog.assertz(f"winner({obj['code']}, {obj['color']})")
+                            print(f"bravo {reward} {type(reward)}")
+
+                            return
+                        print("Mi sono spostato e calcolo il nuovo goal")
+                        self.observe_and_update(step, cmd=cmd, obj=obj)  # aggiorna KB con nuove info
+                        self.move()
+                        return
                     print("nuovo goal")
                     self.move()
                     return
@@ -435,6 +370,7 @@ class AgentNetHack:
                         
                     return True
                 else:
+                    print("Non lo conosco, ma ora ho capito che è walkable")
                     self.prolog.assertz(f"walkable(({code},{color}), true)")
                     self.prolog.assertz(f"is_known(0,({code},{color}), true)")
                     list(self.prolog.query(f"retractall(command(0,({code},{color}), _))"))
@@ -458,6 +394,7 @@ class AgentNetHack:
 
                         return True
                 else:
+                    print("Dovrebbe essere una zona sicura")
                     self.prolog.assertz(f"risk_zone_symbol(({code},{color}), 0)")
                     list(self.prolog.query(f"retractall(command(0,({code},{color}), _))"))
                     return False
