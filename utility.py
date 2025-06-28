@@ -240,7 +240,7 @@ def SymbolToPos(Map, prolog, dict, oldGoal= [], turni= 1):#todo levare questa fu
             results = list(prolog.query(f"walkable(({code},{color}), X)"))
             if len(results)>0:
                 if results[0]['X']=='true':
-                    arr.append(((code,color),(x,y+1),0+turni/200))
+                    arr.append(((code,color),(x,y+1),1+turni/200))
                     continue
             results = list(prolog.query(f"is_known(Y,({code},{color}), X)"))
             if len(results)==0:

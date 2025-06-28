@@ -25,7 +25,6 @@ obs, info = env.reset()
 
 
 a = AgentNetHack(env)
-a.load()
 a.move()
 a.save()
 

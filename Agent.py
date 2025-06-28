@@ -3,6 +3,7 @@ from pathlib import Path
 from utility import a_star, Simboli_unici, SymbolToPos, save, load, ascii_to_idx
 import os
 import time
+import numpy as np
 
 class AgentNetHack:
     def load(self):
@@ -25,6 +26,9 @@ class AgentNetHack:
         
 
     def __init__(self, env):
+        self.prolog = Prolog()
+        self.prolog.consult("kb.pl")
+        self.load()
         self.env=env
         self.obs, self.info = env.reset()
 
@@ -57,70 +61,112 @@ class AgentNetHack:
         msg = "".join([chr(c) for c in self.obs["message"]]).strip()
         inv_letters = [chr(c) for c in self.obs["inv_letters"] if c != 0]
 
-        self.height = len(self.obs["tty_chars"])
+        self.height = len(self.obs["tty_chars"])-2
         self.width = len(self.obs["tty_chars"][0])
-        self.prolog=Prolog()
-        self.prolog.consult("kb.pl")
+        #print(f"nel costruttore height: {self.height} e width: {self.width}")
+
         self.unknow = set()
         self.explored = {}
         self.goals = []
         self.turni=0
 
-    def goal(self):
-        arr=[]
-        """
-        Quando ritorni la lista di goal, torna pure le azioni consigliate su tutti o il primo
-        cosi quando vedi una porta aperta gli dici di attraversarla
-        
-        """
+        height = len(self.obs['tty_chars']) - 3
+        width = len(self.obs['tty_chars'][0])
+        tuple_dtype = np.dtype([('x', np.int32), ('y', np.int32)])
+        self.map = np.zeros((width, height), dtype=tuple_dtype)#dtype=np.int32 se da noia si rimette ma non intero
+        self.updateMap(True)
 
-
-        tty_chars=self.obs['tty_chars']
-        tty_colors=self.obs['tty_colors']
+    def updateMap(self, init:bool=False):
+        tty_chars = self.obs['tty_chars']
+        tty_colors = self.obs['tty_colors']
 
         # Remove the useless row
+
         height = len(tty_chars)
-        tty_chars = tty_chars[1:height-2]
-        tty_colors = tty_colors[1:height-2]
+        tty_chars = tty_chars[1:height - 2]
+        tty_colors = tty_colors[1:height - 2]
 
         height = len(tty_chars)
         width = len(tty_chars[0])
 
         for y in range(height):
             for x in range(width):
-                
-                results = list(self.prolog.query(f"is_monster(({code},{color}), X)"))
-                if len(results)>0:
-                    self.explored[(x,y+1)]=0
-                    
-
-                if self.explored.get((x, y+1), 0) == 1:
+                codeM = self.map[x][y]['x'].item()
+                colorM = self.map[x][y]['y'].item()
+                if not init and codeM != 0:
                     continue
-                code =tty_chars[y][x].item()
+                code = tty_chars[y][x].item()
                 color = tty_colors[y][x].item()
+                if (code, color) != (32, 0):#servirebbe anche il puntino nero
+                    self.map[x, y] = (code, color)
+                else:
+                    list = self.neighbors(x , y+1, self.obs) # get walkable neighbors
+                    if len(list) > 0:
+                        print(f"metto 0,0 in {(x,y)}, {(code, color)}")
+                        self.map[x, y] = (0, 0)
+                    else:
+                        self.map[x, y] = (32, 0)
 
-                if oldGoal is not None:
-                    esiste = any(elem[1:2] == ((x,y)) for elem in oldGoal)
+
+
+
+    def goal(self):
+        """
+        Quando ritorni la lista di goal, torna pure le azioni consigliate su tutti o il primo
+        cosi quando vedi una porta aperta gli dici di attraversarla
+        quando fa un azione sul goal se è walkable dovre camminarci sopra e andare in unalta direzione che non sia quella da cui viene
+        """
+        arr = []
+
+
+
+        height = len(self.map[0])
+        width = len(self.map)
+        #print(f"ALTEZZA E LARGHEZZA {height} {width}")
+
+        for y in range(height):
+            for x in range(width):
+                if self.explored.get((x, y + 1), 0) == 1:
+                    continue
+                #code = tty_chars[y][x].item()
+                #color = tty_colors[y][x].item()
+                code = self.map[x, y]["x"]
+                color = self.map[x, y]["y"]
+
+                """if self.goals is not None:
+                    esiste = any(elem[1:2] == ((x, y)) for elem in self.goals)
                     if esiste == True:
-                        #print(f"Esistono duplicati di {code} {color}, {x} {y}")
-                        continue
-                if (color==0 or (chr(code)=='@' and color==15)):
+                        # print(f"Esistono duplicati di {code} {color}, {x} {y}")
+                        continue"""
+                if (code, color) == (0, 0):
+                    arr.append(((code, color), (x, y), 4))
                     continue
-                results = list(prolog.query(f"is_monster(({code},{color}), X)"))
-                if len(results)>0:
+                elif (color == 0 or (chr(code) == '@' and color == 15)):
+                    continue
+                results = list(self.prolog.query(f"winner({code}, {color})"))
+                if len(results) > 0:
+                    arr.append(((code, color), (x, y + 1), 100))
+                results = list(self.prolog.query(f"is_monster(({code},{color}), X)"))
+                if len(results) > 0:
                     danger = int(results[0]['X'])
-                    arr.append(((code,color),(x,y+1),6+danger+turni/200))
+                    arr.append(((code, color), (x, y + 1), 6 + danger + self.turni / 200))
                     continue
-                results = list(prolog.query(f"walkable(({code},{color}), X)"))
-                if len(results)>0:
-                    if results[0]['X']=='true':
-                        arr.append(((code,color),(x,y+1),0+turni/200))
-                        continue
-                results = list(prolog.query(f"is_known(Y,({code},{color}), X)"))
-                if len(results)==0:
-                    arr.append(((code,color),(x,y+1),5+turni/200))
-                elif int(results[0]['Y'])==57: #is open
-                    arr.append(((code,color),(x,y+1),1+turni/200))
+                """results = list(self.prolog.query(f"walkable(({code},{color}), X)"))
+                if len(results) > 0:
+                    if results[0]['X'] == 'true':
+                        arr.append(((code, color), (x, y + 1), 1 + self.turni / 200))
+                        continue"""
+                results = list(self.prolog.query(f"is_known(Y,({code},{color}), X)"))
+                if len(results) == 0:
+                    arr.append(((code, color), (x, y + 1), 5 + self.turni / 200))
+                elif int(results[0]['Y']) == 57:  # comando per aprire
+                    arr.append(((code, color), (x, y + 1), 1 + self.turni / 200))
+
+        Simboli_unici(self.obs)
+        combined = arr + self.goals
+        """print("-----------SymbolToPos-----------")
+        print(sorted(arr, key=lambda x: x[2], reverse= True))"""
+        self.goals= sorted(combined, key=lambda x: x[2], reverse=True)
 
 
 
@@ -184,6 +230,7 @@ class AgentNetHack:
           
 
         results=list(self.prolog.query(f"walkable(({code},{color}), X)"))
+
         
         if len(results)==0:
             if (code, color) not in self.unknow:
@@ -191,6 +238,8 @@ class AgentNetHack:
                 print(f"fun is_walkable: New object to discover {chr(code)} {code} {color}")
             return True  # initially consider it walkable
         else:
+            if results[0]["X"] == 'true':
+                print(f"{(code,color)}")
             return results[0]["X"] == 'true'
         
 
@@ -202,7 +251,7 @@ class AgentNetHack:
             if len(results)>0:
                 continue
             
-            if 0 <= nx < self.width and 0 <= ny < self.height:
+            if 0 <= nx < self.width and 1 <= ny < self.height:
                 
                 if self.is_walkable((nx, ny), env):
                     result.append((nx, ny))
@@ -212,17 +261,19 @@ class AgentNetHack:
 
 
     def move(self, goal=None):
+        print(list(self.prolog.query(f"walkable(X, false)")))
         self.turni+=1
         start = (self.pos[0], self.pos[1]+1)
         #os.system('clear')  # Pulisce il terminale
         self.env.render()
         #time.sleep(0.5)  # Aspetta un po' per vedere il frame
         #self.goals = SymbolToPos(self.obs, self.prolog, self.explored, self.goals)
-        self.goals = SymbolToPos(self.obs, self.prolog, self.explored, self.goals, self.turni)
+        self.goal()#self.obs, self.prolog, self.explored, self.goals, self.turni
 
-
+        print(self.pos)
         print("GOALLIST")
-        print(self.goals[:10])
+        print(self.goals)
+        return None
 
         #print(goals)
         path = None
@@ -236,11 +287,12 @@ class AgentNetHack:
             print (f"fun move: goal path: {path}")
         obj={}
         if path is None:#perche cazz torna none
-            #return#
+            return
             goal = self.goals[1][1]
             path = a_star(start, goal, self, self.obs)
         for step in path[1:]:
             start = (self.pos[0], self.pos[1]+1)
+
             self.explored[step]=1
             self.pos = (self.obs["blstats"][0].item(), self.obs["blstats"][1].item())
             obj['code']=self.obs['tty_chars'][step[1]][step[0]]
@@ -274,6 +326,7 @@ class AgentNetHack:
                 walkable = False if len(results)>0 and results[0]['X']=="false" else True
                 if len(tmpcmd)==0:# and not walkable:#se non sai che fare, cerca un altro goal
                     if walkable:
+                        print(f"Attualmente mi trovo in {self.pos}")
                         cmd = self.move_to(start, step)
                         self.obs, reward, terminal, truncated, info = self.env.step(cmd)
                         if terminal or truncated:
@@ -285,7 +338,9 @@ class AgentNetHack:
 
                             return
                         print("Mi sono spostato e calcolo il nuovo goal")
+
                         self.observe_and_update(step, cmd=cmd, obj=obj)  # aggiorna KB con nuove info
+                        print(f"Attualmente mi trovo in {self.pos}")
                         self.move()
                         return
                     print("nuovo goal")
