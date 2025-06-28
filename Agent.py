@@ -102,7 +102,7 @@ class AgentNetHack:
                 else:
                     list = self.neighbors(x , y+1, self.obs) # get walkable neighbors
                     if len(list) > 0:
-                        print(f"metto 0,0 in {(x,y)}, {(code, color)}")
+                        #print(f"metto 0,0 in {(x,y)}, {(code, color)}")
                         self.map[x, y] = (0, 0)
                     else:
                         self.map[x, y] = (32, 0)
@@ -238,8 +238,8 @@ class AgentNetHack:
                 print(f"fun is_walkable: New object to discover {chr(code)} {code} {color}")
             return True  # initially consider it walkable
         else:
-            if results[0]["X"] == 'true':
-                print(f"{(code,color)}")
+            #if results[0]["X"] == 'true':
+                #print(f"{(code,color)}")
             return results[0]["X"] == 'true'
         
 
@@ -261,6 +261,7 @@ class AgentNetHack:
 
 
     def move(self, goal=None):
+        self.updateMap()
         print(list(self.prolog.query(f"walkable(X, false)")))
         self.turni+=1
         start = (self.pos[0], self.pos[1]+1)
@@ -270,11 +271,9 @@ class AgentNetHack:
         #self.goals = SymbolToPos(self.obs, self.prolog, self.explored, self.goals)
         self.goal()#self.obs, self.prolog, self.explored, self.goals, self.turni
 
-        print(self.pos)
-        print("GOALLIST")
-        print(self.goals)
-        return None
-
+        #print(self.pos)
+        #print("GOALLIST")
+        #print(self.goals)
         #print(goals)
         path = None
         if self.goals[0][2] >= 6 and self.goals[0][2] < 100:
@@ -476,6 +475,7 @@ class AgentNetHack:
                 obscolor = tty_colors[step[1]][step[0]]
                 if ((color!=obscolor) or (code!=obscode)):
                     print(f"Debug: new")
+                    self.map[step[0]][step[1]-1]=(obscode,obscolor)
                     self.prolog.assertz(f"is_known({cmd},({code},{color}), true)")
             
             return True
