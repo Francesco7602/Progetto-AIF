@@ -61,7 +61,7 @@ class AgentNetHack:
         msg = "".join([chr(c) for c in self.obs["message"]]).strip()
         inv_letters = [chr(c) for c in self.obs["inv_letters"] if c != 0]
 
-        self.height = len(self.obs["tty_chars"])-2
+        self.height = len(self.obs["tty_chars"])-3
         self.width = len(self.obs["tty_chars"][0])
         #print(f"nel costruttore height: {self.height} e width: {self.width}")
 
@@ -93,19 +93,21 @@ class AgentNetHack:
             for x in range(width):
                 codeM = self.map[x][y]['x'].item()
                 colorM = self.map[x][y]['y'].item()
-                if not init and codeM != 0:
-                    continue
+
                 code = tty_chars[y][x].item()
                 color = tty_colors[y][x].item()
+                
                 if (code, color) != (32, 0):#servirebbe anche il puntino nero
-                    self.map[x, y] = (code, color)
+                    self.map[x][y] = (code, color)
                 else:
-                    list = self.neighbors(x , y+1, self.obs) # get walkable neighbors
+                    if not init and codeM != 0:
+                        continue
+                    list = self.neighbors(x , y, self.obs) # get walkable neighbors
                     if len(list) > 0:
                         #print(f"metto 0,0 in {(x,y)}, {(code, color)}")
-                        self.map[x, y] = (0, 0)
+                        self.map[x][y] = (0, 0)
                     else:
-                        self.map[x, y] = (32, 0)
+                        self.map[x][y] = (32, 0)
 
 
 
@@ -126,12 +128,12 @@ class AgentNetHack:
 
         for y in range(height):
             for x in range(width):
-                if self.explored.get((x, y + 1), 0) == 1:
+                if self.explored.get((x, y), 0) == 1:
                     continue
                 #code = tty_chars[y][x].item()
                 #color = tty_colors[y][x].item()
-                code = self.map[x, y]["x"]
-                color = self.map[x, y]["y"]
+                code = self.map[x][y]["x"]
+                color = self.map[x][y]["y"]
 
                 """if self.goals is not None:
                     esiste = any(elem[1:2] == ((x, y)) for elem in self.goals)
@@ -145,11 +147,11 @@ class AgentNetHack:
                     continue
                 results = list(self.prolog.query(f"winner({code}, {color})"))
                 if len(results) > 0:
-                    arr.append(((code, color), (x, y + 1), 100))
+                    arr.append(((code, color), (x, y), 100))
                 results = list(self.prolog.query(f"is_monster(({code},{color}), X)"))
                 if len(results) > 0:
                     danger = int(results[0]['X'])
-                    arr.append(((code, color), (x, y + 1), 6 + danger + self.turni / 200))
+                    arr.append(((code, color), (x, y), 6 + danger + self.turni / 200))
                     continue
                 """results = list(self.prolog.query(f"walkable(({code},{color}), X)"))
                 if len(results) > 0:
@@ -158,9 +160,9 @@ class AgentNetHack:
                         continue"""
                 results = list(self.prolog.query(f"is_known(Y,({code},{color}), X)"))
                 if len(results) == 0:
-                    arr.append(((code, color), (x, y + 1), 5 + self.turni / 200))
+                    arr.append(((code, color), (x, y), 5 + self.turni / 200))
                 elif int(results[0]['Y']) == 57:  # comando per aprire
-                    arr.append(((code, color), (x, y + 1), 1 + self.turni / 200))
+                    arr.append(((code, color), (x, y), 1 + self.turni / 200))
 
         Simboli_unici(self.obs)
         combined = arr + self.goals
@@ -208,8 +210,13 @@ class AgentNetHack:
     def logical_penalty(self, pos, goal, env):
         term = 0
         x, y = pos
-        code = env["tty_chars"][y][x]
-        color = env["tty_colors"][y][x]
+
+        code = self.map[x][y]['x'] #env["tty_chars"][y][x]
+        color = self.map[x][y]['y'] #env["tty_colors"][y][x]
+
+        #code = env["tty_chars"][y][x]
+        #color = env["tty_colors"][y][x]
+
         results=list(self.prolog.query(f"risk_zone_symbol(({code},{color}), X)"))
         
         if len(results)>0:
@@ -225,8 +232,8 @@ class AgentNetHack:
 
     def is_walkable(self, pos, env):
         x, y = pos
-        code = env["tty_chars"][y][x]
-        color = env["tty_colors"][y][x]
+        code = self.map[x][y]['x']  #env["tty_chars"][y][x]
+        color = self.map[x][y]['y']  # env["tty_colors"][y][x]
           
 
         results=list(self.prolog.query(f"walkable(({code},{color}), X)"))
@@ -251,7 +258,7 @@ class AgentNetHack:
             if len(results)>0:
                 continue
             
-            if 0 <= nx < self.width and 1 <= ny < self.height:
+            if 0 <= nx < self.width and 0 <= ny < self.height:
                 
                 if self.is_walkable((nx, ny), env):
                     result.append((nx, ny))
@@ -261,10 +268,10 @@ class AgentNetHack:
 
 
     def move(self, goal=None):
+        self.pos = (self.obs["blstats"][0].item(), self.obs["blstats"][1].item())
         self.updateMap()
-        print(list(self.prolog.query(f"walkable(X, false)")))
         self.turni+=1
-        start = (self.pos[0], self.pos[1]+1)
+        start = (self.pos[0], self.pos[1])
         #os.system('clear')  # Pulisce il terminale
         self.env.render()
         #time.sleep(0.5)  # Aspetta un po' per vedere il frame
@@ -282,20 +289,39 @@ class AgentNetHack:
         else:
 
             goal = self.goals[0][1]
+            print(f"debug ... ({start} to {goal} {self.map[start[0]][start[1]]['x']} goal pos: {self.map[goal[0]][goal[1]]['x']})")
+            #print(f"debug ... ({start} to {goal} {self.map[start[0]][start[1]-1]['x']} goal pos: {self.map[goal[0]][goal[1]]['x']})")
+            #print(f"debug ... ({start} to {goal} {self.map[start[0]][start[1]+1]['x']} goal pos: {self.map[goal[0]][goal[1]]['x']})")
+
+            print(f"debug @... ({start} to {goal} {self.obs['tty_chars'][start[1]+1][start[0]]})")
+            
+            #print(f"debug ... ({start} to {goal} {self.map[start[0]][start[1]]['x']} goal pos: {self.map[goal[0]][goal[1]]['x']})")
+            #print(f"debug ... ({start} to {goal} {self.map[start[0]][start[1]]['x']} goal pos: {self.map[goal[0]][goal[1]]['x']})")
+            #print(f"debug ... ({start} to {goal} {self.map[start[0]][start[1]]['x']} goal pos: {self.map[goal[0]][goal[1]]['x']})")
             path = a_star(start, goal, self, self.obs)
             print (f"fun move: goal path: {path}")
         obj={}
-        if path is None:#perche cazz torna none
+        if path is None:
             return
             goal = self.goals[1][1]
             path = a_star(start, goal, self, self.obs)
         for step in path[1:]:
-            start = (self.pos[0], self.pos[1]+1)
-
-            self.explored[step]=1
+            
             self.pos = (self.obs["blstats"][0].item(), self.obs["blstats"][1].item())
-            obj['code']=self.obs['tty_chars'][step[1]][step[0]]
-            obj['color']=self.obs['tty_colors'][step[1]][step[0]]
+            start = (self.pos[0], self.pos[1])
+
+            print("UpdateMap")
+            self.updateMap()
+
+            print(f"debug character ... {chr(self.map[start[0]][start[1]]['x'])} ({start} to {goal} goal pos: {self.map[goal[0]][goal[1]]['x']})")
+            print(f"debug characterOBS ... {chr(self.obs['tty_chars'][start[1]+1][start[0]])} ({start} to {goal} goal pos: {self.map[goal[0]][goal[1]]['x']})")
+            self.explored[step]=1
+            
+            obj['code']=self.map[step[0]][step[1]]['x']
+            obj['color']=self.map[step[0]][step[1]]['y']
+
+            #obj['code']=self.obs['tty_chars'][step[1]][step[0]]
+            #obj['color']=self.obs['tty_colors'][step[1]][step[0]]
 
             results = list(self.prolog.query(f"is_known(Y,({obj['code']},{obj['color']}), X)"))
             cmdlist = [ascii_to_idx('o'), ascii_to_idx('c')]
@@ -342,7 +368,7 @@ class AgentNetHack:
                         print(f"Attualmente mi trovo in {self.pos}")
                         self.move()
                         return
-                    print("nuovo goal")
+                    print("nuovo goal 2")
                     self.move()
                     return
                 #elif len(tmpcmd)==0:
@@ -383,7 +409,7 @@ class AgentNetHack:
 
             #time.sleep(0.5)  # Aspetta un po' per vedere il frame
             if self.observe_and_update(step, cmd=cmd, obj=obj):  # aggiorna KB con nuove info
-                print("nuovo goal")
+                print("nuovo goal 1")
                 self.move()
                 return
             elif step == goal:
@@ -392,6 +418,7 @@ class AgentNetHack:
 
 
     def observe_and_update(self, step, cmd=None, obj=None):
+        self.updateMap()
         blstats = self.obs["blstats"]
         print(f"cmd {cmd}, mappa pos: {self.pos}")
 
@@ -400,8 +427,8 @@ class AgentNetHack:
         if cmd<8:
             cont = 0
             if (self.pos == (blstats[0].item(), blstats[1].item())):
-                self.prolog.assertz(f"moveInvalid(({self.pos[0]},{self.pos[1]+1}), ({step[0]},{step[1]}), 10)")
-                print(f"insert moveInvalid {self.pos[0]}, {self.pos[1]+1} to ({step[0]},{step[1]})")
+                self.prolog.assertz(f"moveInvalid(({self.pos[0]},{self.pos[1]}), ({step[0]},{step[1]}), 10)")
+                print(f"insert moveInvalid {self.pos[0]}, {self.pos[1]} to ({step[0]},{step[1]})")
                 self.explored[step]=0
                 #return True
             results = list(self.prolog.query(f"is_known(0,({code},{color}), X)")) #e possibile camminarci sopra
@@ -471,11 +498,11 @@ class AgentNetHack:
                 tty_chars=self.obs['tty_chars']
                 tty_colors=self.obs['tty_colors']
 
-                obscode = tty_chars[step[1]][step[0]]
-                obscolor = tty_colors[step[1]][step[0]]
+                obscode = tty_chars[step[1]+1][step[0]]
+                obscolor = tty_colors[step[1]+1][step[0]]
                 if ((color!=obscolor) or (code!=obscode)):
                     print(f"Debug: new")
-                    self.map[step[0]][step[1]-1]=(obscode,obscolor)
+                    self.map[step[0]][step[1]]=(obscode,obscolor)
                     self.prolog.assertz(f"is_known({cmd},({code},{color}), true)")
             
             return True
