@@ -184,7 +184,7 @@ def Simboli_unici(observation):
 
     for row_chars, row_colors in zip(tty_chars, tty_colors):
         for char, color in zip(row_chars, row_colors):
-            if color!=0:
+            #if color!=0:
                 symbols.add((char, color))
 
             

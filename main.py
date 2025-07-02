@@ -9,7 +9,7 @@ import re
 level = minihack.LevelGenerator()
 
 # Percorso al tuo file .des
-des_file = "dat/closed_door.des"
+des_file = "dat/chest.des"
 
 # Leggi il contenuto del file .des
 with open(des_file, "r") as f:
@@ -27,6 +27,7 @@ obs, info = env.reset()
 a = AgentNetHack(env)
 a.move()
 a.save()
+print(f"turni {a.turni}")
 
 #env.render()
 #

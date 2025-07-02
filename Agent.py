@@ -73,7 +73,11 @@ class AgentNetHack:
         height = len(self.obs['tty_chars']) - 3
         width = len(self.obs['tty_chars'][0])
         tuple_dtype = np.dtype([('x', np.int32), ('y', np.int32)])
+        #self.map = np.full((width, height), dtype=tuple_dtype)
         self.map = np.zeros((width, height), dtype=tuple_dtype)#dtype=np.int32 se da noia si rimette ma non intero
+        for x in range(0,width):
+            for y in range(0,height):
+                self.map[x][y]=(32,0)
         self.updateMap(True)
 
     def updateMap(self, init:bool=False):
@@ -89,6 +93,14 @@ class AgentNetHack:
         height = len(tty_chars)
         width = len(tty_chars[0])
 
+        if init:
+            for y in range(height):
+                for x in range(width):
+                    code = tty_chars[y][x].item()
+                    color = tty_colors[y][x].item()
+                    self.map[x][y] = (code, color)
+
+        #print("MAPPA")
         for y in range(height):
             for x in range(width):
                 codeM = self.map[x][y]['x'].item()
@@ -100,14 +112,21 @@ class AgentNetHack:
                 if (code, color) != (32, 0):#servirebbe anche il puntino nero
                     self.map[x][y] = (code, color)
                 else:
-                    if not init and codeM != 0:
+                    if not init and codeM != 97:
                         continue
-                    list = self.neighbors(x , y, self.obs) # get walkable neighbors
+                    list = self.neighbors(x , y, self.obs, False) # get walkable neighbors
+                    #print(f"X: {x}, y: {y}, n vicini {len(list)}")
                     if len(list) > 0:
                         #print(f"metto 0,0 in {(x,y)}, {(code, color)}")
                         self.map[x][y] = (0, 0)
                     else:
                         self.map[x][y] = (32, 0)
+                
+
+        #for y in range(height):
+        #    for x in range(width):      
+        #        print(f"{chr(self.map[x][y]['x'])}", end="")
+        #    print("")
 
 
 
@@ -118,6 +137,9 @@ class AgentNetHack:
         cosi quando vedi una porta aperta gli dici di attraversarla
         quando fa un azione sul goal se è walkable dovre camminarci sopra e andare in unalta direzione che non sia quella da cui viene
         """
+
+        target_pos = (self.pos[0], self.pos[1])
+        self.goals = [g for g in self.goals if g[1] != target_pos]
         arr = []
 
 
@@ -132,9 +154,10 @@ class AgentNetHack:
                     continue
                 #code = tty_chars[y][x].item()
                 #color = tty_colors[y][x].item()
-                code = self.map[x][y]["x"]
-                color = self.map[x][y]["y"]
-
+                code = self.map[x][y]["x"].item()
+                color = self.map[x][y]["y"].item()
+                #if color not in [0,7]:
+                    #print(f"goal simb {(code, color)}")
                 """if self.goals is not None:
                     esiste = any(elem[1:2] == ((x, y)) for elem in self.goals)
                     if esiste == True:
@@ -144,6 +167,8 @@ class AgentNetHack:
                     arr.append(((code, color), (x, y), 4))
                     continue
                 elif (color == 0 or (chr(code) == '@' and color == 15)):
+                    if chr(code) == '@':
+                        print(f"Salto {(x,y)} ({chr(code)})")
                     continue
                 results = list(self.prolog.query(f"winner({code}, {color})"))
                 if len(results) > 0:
@@ -169,6 +194,8 @@ class AgentNetHack:
         """print("-----------SymbolToPos-----------")
         print(sorted(arr, key=lambda x: x[2], reverse= True))"""
         self.goals= sorted(combined, key=lambda x: x[2], reverse=True)
+        
+        #print(f"goals {self.goals}")
 
 
 
@@ -230,13 +257,16 @@ class AgentNetHack:
         return term
 
 
-    def is_walkable(self, pos, env):
+    def is_walkable(self, pos, env, flag):
         x, y = pos
-        code = self.map[x][y]['x']  #env["tty_chars"][y][x]
-        color = self.map[x][y]['y']  # env["tty_colors"][y][x]
-          
+        code = self.map[x][y]['x'].item()  #env["tty_chars"][y][x]
+        color = self.map[x][y]['y'].item()  # env["tty_colors"][y][x]
+
+        #print(f"simbolo {(code, color)} pos {(x,y)}") 
 
         results=list(self.prolog.query(f"walkable(({code},{color}), X)"))
+        if flag and ((code, color) == (0 ,0)):
+           results=[] 
 
         
         if len(results)==0:
@@ -250,7 +280,7 @@ class AgentNetHack:
             return results[0]["X"] == 'true'
         
 
-    def neighbors(self, x, y, env):
+    def neighbors(self, x, y, env, flag = True):
         result = []
         for dx, dy in [(-1,0), (1,0), (0,-1), (0,1), (1,1), (1,-1), (-1,1), (-1,-1)]:
             nx, ny = x + dx, y + dy
@@ -260,7 +290,7 @@ class AgentNetHack:
             
             if 0 <= nx < self.width and 0 <= ny < self.height:
                 
-                if self.is_walkable((nx, ny), env):
+                if self.is_walkable((nx, ny), env, flag):
                     result.append((nx, ny))
         return result
 
@@ -274,10 +304,11 @@ class AgentNetHack:
         start = (self.pos[0], self.pos[1])
         #os.system('clear')  # Pulisce il terminale
         self.env.render()
-        #time.sleep(0.5)  # Aspetta un po' per vedere il frame
+        time.sleep(0.5)  # Aspetta un po' per vedere il frame
         #self.goals = SymbolToPos(self.obs, self.prolog, self.explored, self.goals)
         self.goal()#self.obs, self.prolog, self.explored, self.goals, self.turni
-
+        #return
+        
         #print(self.pos)
         #print("GOALLIST")
         #print(self.goals)
@@ -354,6 +385,8 @@ class AgentNetHack:
                         print(f"Attualmente mi trovo in {self.pos}")
                         cmd = self.move_to(start, step)
                         self.obs, reward, terminal, truncated, info = self.env.step(cmd)
+                        self.env.render()
+                        time.sleep(0.5)
                         if terminal or truncated:
                             if reward > 0.5:
                                 results = list(self.prolog.query(f"winner({obj['code']}, {obj['color']})"))
@@ -381,6 +414,8 @@ class AgentNetHack:
                     #time.sleep(0.5)  # Aspetta un po' per vedere il frame
                     cmd1 = self.move_to(start, step)  # direction
                     self.obs, reward, terminal, truncated, info = self.env.step(cmd1)
+                    self.env.render()
+                    time.sleep(0.5)
                     #os.system('clear')  # Pulisce il terminale
                     #self.env.render()
                     #time.sleep(0.5)  # Aspetta un po' per vedere il frame
@@ -390,6 +425,8 @@ class AgentNetHack:
             else:
                 cmd = self.move_to(start, step)
                 self.obs, reward, terminal, truncated, info = self.env.step(cmd)
+                self.env.render()
+                time.sleep(0.5)
                 #self.env.render()
 
 
@@ -592,5 +629,3 @@ class AgentNetHack:
             print("peggiore classe armatura (più alta)")
         self.ac = blstats[16]
         return False
-
-

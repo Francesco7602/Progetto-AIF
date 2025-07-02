@@ -17,6 +17,8 @@
 :- dynamic moveInvalid/3.
 :- dynamic winner/2.
 
+walkable((0, 0),false).
+walkable((32, 0),false).
 
 healthy :-
     health(H),
