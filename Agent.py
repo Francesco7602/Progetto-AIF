@@ -111,22 +111,24 @@ class AgentNetHack:
                 
                 if (code, color) != (32, 0):#servirebbe anche il puntino nero
                     self.map[x][y] = (code, color)
-                else:
-                    if not init and codeM != 97:
-                        continue
-                    list = self.neighbors(x , y, self.obs, False) # get walkable neighbors
-                    #print(f"X: {x}, y: {y}, n vicini {len(list)}")
+
+        for y in range(height):
+            for x in range(width):
+                codeM = self.map[x][y]['x'].item()
+                colorM = self.map[x][y]['y'].item()
+                if codeM == 32:
+                    list = self.neighbors(x, y, self.obs, False)  # get walkable neighbors
+                    # print(f"X: {x}, y: {y}, n vicini {len(list)}")
                     if len(list) > 0:
-                        #print(f"metto 0,0 in {(x,y)}, {(code, color)}")
+                        # print(f"metto 0,0 in {(x,y)}, {(code, color)}")
                         self.map[x][y] = (0, 0)
                     else:
                         self.map[x][y] = (32, 0)
-                
 
-        #for y in range(height):
-        #    for x in range(width):      
-        #        print(f"{chr(self.map[x][y]['x'])}", end="")
-        #    print("")
+        """for y in range(height):
+            for x in range(width):
+                print(f"{chr(self.map[x][y]['x'])}", end="")
+            print("")"""
 
 
 
@@ -304,7 +306,7 @@ class AgentNetHack:
         start = (self.pos[0], self.pos[1])
         #os.system('clear')  # Pulisce il terminale
         self.env.render()
-        time.sleep(0.5)  # Aspetta un po' per vedere il frame
+        #time.sleep(0.5)  # Aspetta un po' per vedere il frame
         #self.goals = SymbolToPos(self.obs, self.prolog, self.explored, self.goals)
         self.goal()#self.obs, self.prolog, self.explored, self.goals, self.turni
         #return
@@ -386,7 +388,7 @@ class AgentNetHack:
                         cmd = self.move_to(start, step)
                         self.obs, reward, terminal, truncated, info = self.env.step(cmd)
                         self.env.render()
-                        time.sleep(0.5)
+                        #time.sleep(0.5)
                         if terminal or truncated:
                             if reward > 0.5:
                                 results = list(self.prolog.query(f"winner({obj['code']}, {obj['color']})"))
@@ -415,7 +417,7 @@ class AgentNetHack:
                     cmd1 = self.move_to(start, step)  # direction
                     self.obs, reward, terminal, truncated, info = self.env.step(cmd1)
                     self.env.render()
-                    time.sleep(0.5)
+                    #time.sleep(0.5)
                     #os.system('clear')  # Pulisce il terminale
                     #self.env.render()
                     #time.sleep(0.5)  # Aspetta un po' per vedere il frame
@@ -426,7 +428,7 @@ class AgentNetHack:
                 cmd = self.move_to(start, step)
                 self.obs, reward, terminal, truncated, info = self.env.step(cmd)
                 self.env.render()
-                time.sleep(0.5)
+                #time.sleep(0.5)
                 #self.env.render()
 
 
