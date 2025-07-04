@@ -69,6 +69,7 @@ class AgentNetHack:
         self.explored = {}
         self.goals = []
         self.turni=0
+        self.cachewalkable={}
 
         height = len(self.obs['tty_chars']) - 3
         width = len(self.obs['tty_chars'][0])
@@ -80,7 +81,24 @@ class AgentNetHack:
                 self.map[x][y]=(32,0)
         self.updateMap(True)
 
+    
+    def set_fog(self,x,y):
+        #start = time.time()
+        codeM = self.map[x][y]['x'].item()
+        colorM = self.map[x][y]['y'].item()
+        if codeM == 32:
+            list = self.neighbors(x, y, self.obs, False)  # get walkable neighbors
+            # print(f"X: {x}, y: {y}, n vicini {len(list)}")
+            if len(list) > 0:
+                # print(f"metto 0,0 in {(x,y)}, {(code, color)}")
+                self.map[x][y] = (0, 0)
+            else:
+                self.map[x][y] = (32, 0)
+        #print(f"time set_fog: {time.time()-start}")
+
+    
     def updateMap(self, init:bool=False):
+        start = time.time()
         tty_chars = self.obs['tty_chars']
         tty_colors = self.obs['tty_colors']
 
@@ -93,13 +111,15 @@ class AgentNetHack:
         height = len(tty_chars)
         width = len(tty_chars[0])
 
+
         if init:
             for y in range(height):
                 for x in range(width):
                     code = tty_chars[y][x].item()
                     color = tty_colors[y][x].item()
                     self.map[x][y] = (code, color)
-
+        print(f"time 1 updateMap: {time.time()-start} {init}")
+        start = time.time()
         #print("MAPPA")
         for y in range(height):
             for x in range(width):
@@ -111,6 +131,8 @@ class AgentNetHack:
                 
                 if (code, color) != (32, 0):#servirebbe anche il puntino nero
                     self.map[x][y] = (code, color)
+        print(f"time 2 updateMap: {time.time()-start} {init}")
+        start = time.time()
 
         for y in range(height):
             for x in range(width):
@@ -118,22 +140,25 @@ class AgentNetHack:
                 colorM = self.map[x][y]['y'].item()
                 if codeM == 32:
                     list = self.neighbors(x, y, self.obs, False)  # get walkable neighbors
-                    # print(f"X: {x}, y: {y}, n vicini {len(list)}")
                     if len(list) > 0:
-                        # print(f"metto 0,0 in {(x,y)}, {(code, color)}")
                         self.map[x][y] = (0, 0)
                     else:
                         self.map[x][y] = (32, 0)
 
-        """for y in range(height):
+        print(f"time 3 updateMap: {time.time()-start} {init}")
+        start = time.time()
+                
+        for y in range(height):
             for x in range(width):
                 print(f"{chr(self.map[x][y]['x'])}", end="")
-            print("")"""
+            print("")
+        
+        print(f"time 4 updateMap: {time.time()-start} {init}")
 
 
 
 
-    def goal(self):
+    def goal(self, obj = None):
         """
         Quando ritorni la lista di goal, torna pure le azioni consigliate su tutti o il primo
         cosi quando vedi una porta aperta gli dici di attraversarla
@@ -144,7 +169,11 @@ class AgentNetHack:
         self.goals = [g for g in self.goals if g[1] != target_pos]
         arr = []
 
-
+        if obj:
+            print(f"DENTRO 1 {obj[0]}")
+            if obj[0] ==(0,0):
+                print("DENTRO 2")
+                self.goals=[]
 
         height = len(self.map[0])
         width = len(self.map)
@@ -264,22 +293,27 @@ class AgentNetHack:
         code = self.map[x][y]['x'].item()  #env["tty_chars"][y][x]
         color = self.map[x][y]['y'].item()  # env["tty_colors"][y][x]
 
-        #print(f"simbolo {(code, color)} pos {(x,y)}") 
+        #print(f"simbolo {(code, color)} pos {(x,y)}")
 
-        results=list(self.prolog.query(f"walkable(({code},{color}), X)"))
         if flag and ((code, color) == (0 ,0)):
-           results=[] 
+           return True
 
-        
-        if len(results)==0:
-            if (code, color) not in self.unknow:
-                self.unknow.add((code, color))
-                print(f"fun is_walkable: New object to discover {chr(code)} {code} {color}")
-            return True  # initially consider it walkable
-        else:
-            #if results[0]["X"] == 'true':
-                #print(f"{(code,color)}")
-            return results[0]["X"] == 'true'
+
+        key = (code,color)
+        if key not in self.cachewalkable:
+            results=list(self.prolog.query(f"walkable(({code},{color}), X)"))
+            if len(results)==0:
+                if (code, color) not in self.unknow:
+                    self.unknow.add((code, color))
+                    #print(f"fun is_walkable: New object to discover {chr(code)} {code} {color}")
+                return True  # initially consider it walkable
+            else:
+                #if results[0]["X"] == 'true':
+                    #print(f"{(code,color)}")
+                res = results[0]["X"] == 'true'
+                self.cachewalkable[key]=res
+                return res
+        return self.cachewalkable[key]
         
 
     def neighbors(self, x, y, env, flag = True):
@@ -299,16 +333,24 @@ class AgentNetHack:
 
 
 
-    def move(self, goal=None):
+    def move(self, objgoal=None):
         self.pos = (self.obs["blstats"][0].item(), self.obs["blstats"][1].item())
-        self.updateMap()
+        #self.updateMap()
+        
         self.turni+=1
         start = (self.pos[0], self.pos[1])
         #os.system('clear')  # Pulisce il terminale
         self.env.render()
         #time.sleep(0.5)  # Aspetta un po' per vedere il frame
         #self.goals = SymbolToPos(self.obs, self.prolog, self.explored, self.goals)
-        self.goal()#self.obs, self.prolog, self.explored, self.goals, self.turni
+        self.goal(objgoal)#self.obs, self.prolog, self.explored, self.goals, self.turni
+        print(f"goals: {self.goals}")
+        #if self.turni>1:
+        #    for y in range(self.height):
+        #        for x in range(self.width):
+        #            print(f"{chr(self.map[x][y]['x'])}", end="")
+        #        print("")
+        #    return
         #return
         
         #print(self.pos)
@@ -320,7 +362,7 @@ class AgentNetHack:
             print("Hahaha mostro")
 
         else:
-
+            objgoal = self.goals[0]
             goal = self.goals[0][1]
             print(f"debug ... ({start} to {goal} {self.map[start[0]][start[1]]['x']} goal pos: {self.map[goal[0]][goal[1]]['x']})")
             #print(f"debug ... ({start} to {goal} {self.map[start[0]][start[1]-1]['x']} goal pos: {self.map[goal[0]][goal[1]]['x']})")
@@ -343,8 +385,8 @@ class AgentNetHack:
             self.pos = (self.obs["blstats"][0].item(), self.obs["blstats"][1].item())
             start = (self.pos[0], self.pos[1])
 
-            print("UpdateMap")
-            self.updateMap()
+            #print("UpdateMap")
+            #self.updateMap()
 
             print(f"debug character ... {chr(self.map[start[0]][start[1]]['x'])} ({start} to {goal} goal pos: {self.map[goal[0]][goal[1]]['x']})")
             print(f"debug characterOBS ... {chr(self.obs['tty_chars'][start[1]+1][start[0]])} ({start} to {goal} goal pos: {self.map[goal[0]][goal[1]]['x']})")
@@ -378,8 +420,13 @@ class AgentNetHack:
             #print(f"debug {tmpcmd, obj['code'], obj['color']}")
             #if len(results)==0 or (len(results)>0 and results[0].get('X', 'true') == 'true'):
             if step == goal:
+                
+                if obj['code'] ==0:
+                    self.updateMap()
+                    self.move(objgoal)
+                    return
 
-                print("sono accanto al goal")
+                print(f"sono accanto al goal {obj['code']}")
                 results = list(self.prolog.query(f"walkable(({obj['code']}, {obj['color']}), X)"))
                 walkable = False if len(results)>0 and results[0]['X']=="false" else True
                 if len(tmpcmd)==0:# and not walkable:#se non sai che fare, cerca un altro goal
@@ -457,12 +504,28 @@ class AgentNetHack:
 
 
     def observe_and_update(self, step, cmd=None, obj=None):
-        self.updateMap()
-        blstats = self.obs["blstats"]
-        print(f"cmd {cmd}, mappa pos: {self.pos}")
-
         code = obj['code']
         color = obj['color']
+        #if code ==0:
+        #    self.updateMap()
+        #    return True
+        blstats = self.obs["blstats"]
+        print(f"cmd {cmd}, mappa pos: {self.pos}")
+        tty_chars =self.obs["tty_chars"]
+        tty_colors =self.obs["tty_colors"]
+
+        obscode = tty_chars[self.pos[1]+1][self.pos[0]]
+        obscolor = tty_colors[self.pos[1]+1][self.pos[0]]
+        self.map[self.pos[0]][self.pos[1]]=(obscode,obscolor)
+
+        obscode = tty_chars[step[1]+1][step[0]]
+        obscolor = tty_colors[step[1]+1][step[0]]
+        self.map[step[0]][step[1]]=(obscode,obscolor)
+
+        
+
+
+
         if cmd<8:
             cont = 0
             if (self.pos == (blstats[0].item(), blstats[1].item())):

@@ -1,6 +1,7 @@
 import minihack
 import nle.nethack.actions as actions
 import minihack.dat
+import time
 
 from Agent import AgentNetHack
 from utility import ascii_to_idx, print_stats, print_inventory, Simboli_unici
@@ -15,7 +16,7 @@ des_file = "dat/closed_door.des"
 with open(des_file, "r") as f:
     des_content = f.read()
 
-env = minihack.MiniHack(des_file=des_content, actions=actions.ACTIONS, max_episode_steps=50, pet=False, observation_keys=['glyphs', 'tty_chars', 'tty_colors', 'chars', 'colors', 'specials', 'glyphs_crop', 'chars_crop', 'colors_crop', 'specials_crop', 'blstats', 'message','inv_strs', 'inv_letters'])
+env = minihack.MiniHack(des_file=des_content, actions=actions.ACTIONS, max_episode_steps=200, pet=False, observation_keys=['glyphs', 'tty_chars', 'tty_colors', 'chars', 'colors', 'specials', 'glyphs_crop', 'chars_crop', 'colors_crop', 'specials_crop', 'blstats', 'message','inv_strs', 'inv_letters'])
 
 obs, info = env.reset()
 
@@ -23,12 +24,12 @@ obs, info = env.reset()
 #Simboli_unici(obs)
 
 
-
+start = time.time()
 a = AgentNetHack(env)
 a.move()
 a.save()
 print(f"turni {a.turni}")
-
+print(f"time: {time.time()-start}")
 #env.render()
 #
 #print_inventory(obs)
