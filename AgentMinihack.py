@@ -167,14 +167,17 @@ class AgentNetHack:
 
         for y in range(self.height):
             for x in range(self.width):
-                if self.explored.get((x,y),0)==1: #per evitare di andare nelle posizioni che ci danno errore (se non li conosciamo)
-                    continue
-                dist  = max(abs(x - self.pos[0]), abs(y - self.pos[1]))
                 code = self.map[x][y]["x"].item()
                 color = self.map[x][y]["y"].item()
+                #print(f"Elab simbol {(code,color)}")
+                if self.explored.get((x,y),0)==1: #per evitare di andare nelle posizioni che ci danno errore (se non li conosciamo)
+                    print(f"Salto simbol {(code,color)}")
+                    continue
+                dist  = max(abs(x - self.pos[0]), abs(y - self.pos[1]))
+                
                 match (code, color):
                     case (0,0): #fog
-                        self.goals.append(((code, color), (x, y), 4, dist, 0))
+                        self.goals.append(((code, color), (x, y), 1, dist, 0))
                     case (32,0): #wall
                         pass
                     case (64,15): #character
@@ -211,18 +214,24 @@ class AgentNetHack:
         
         target = self.goals[0]
         if target[4]==2:
-            print (f"I need to learn ({target[0][0]},{target[0][1]})")
             results = list(self.prolog.query(f"is_known(Y,({target[0][0]},{target[0][1]}), X)"))
+
+            tmpcmd=self.cmd.copy()
+            for i in results:
+                if i.get('Y') in tmpcmd:
+                    tmpcmd.remove(i.get('Y'))
             #self.cardinal_directions =True
-            target = (target[0], target[1], target[2], target[3], 0)
+            target = (target[0], target[1], target[2], target[3], tmpcmd[0])
+            print (f"I need to learn ({target[0][0]},{target[0][1]}) cmd: {tmpcmd[0]}")
         if target[4]==1:
             print ("I need to fight")
         
-        if target[4]==0 and self.cachewalkable.get(target[0],False):
+        if self.cachewalkable.get(target[0],True): #target[4]==0 and
             path = a_star(self.pos, target[1], self)
             #self.cardinal_directions =False
         else:
             lista=self.neighbors(target[1], cardinal_directions=True)
+            #scegliere il vicino può vicino a noi
             print(f"{target[1]} non walkable: vado in {lista[0]}, {target[0]}")
             path = a_star(self.pos, lista[0], self)
             if len is None:
@@ -244,7 +253,7 @@ class AgentNetHack:
                 case _:
                     cmd.append(target[4])
                     cmd.append(self.move_to(start, target[1]))
-            n = 1 if target[0] ==(0,0) else 5                
+            n = 1 if target[0] ==(0,0) else 10                
             arr.append(((self.map[target[1][0]][target[1][1]]['x'].item(),self.map[target[1][0]][target[1][1]]['y'].item()), target[1], cmd, n))
             
         for step in path[1:]:
@@ -627,6 +636,7 @@ class AgentNetHack:
                 list(self.prolog.query(f"retractall(command({cmd},({simbol[0]},{simbol[1]}), _))"))
                 cont = (results[0]['X'])
                 self.prolog.assertz(f"command({cmd},({simbol[0]},{simbol[1]}), {cont+1})")
+                print(f"command({cmd},({simbol[0]},{simbol[1]}), {cont+1})")
             if cont>5:
                 if cmd ==0:
                     self.prolog.assertz(f"walkable(({simbol[0]},{simbol[1]}), false)")
@@ -634,9 +644,9 @@ class AgentNetHack:
                     key = (simbol[0],simbol[1])
                     self.cachewalkable[key]=False
                 self.prolog.assertz(f"is_known({cmd},({simbol[0]},{simbol[1]}), false)")
+                print(f"is_known({cmd},({simbol[0]},{simbol[1]}), false)")
                 list(self.prolog.query(f"retractall(command({cmd},({simbol[0]},{simbol[1]}), _))"))
             
-        #if cmd !=0:
             results = list(self.prolog.query(f"is_known({cmd},({simbol[0]},{simbol[1]}), X)"))
             tty_chars=self.obs['tty_chars']
             tty_colors=self.obs['tty_colors']
@@ -659,7 +669,7 @@ class AgentNetHack:
             self.explored[pos]=1
             flagUpdate = True
         elif len(results) ==0 and cmd==0:
-            print("Non lo conosco, ma ora ho capito che è walkable")
+            print(f"Non lo conosco, ma ora ho capito che è walkable ({simbol[0]},{simbol[1]}) posi {(self.pos)} , {(blstats[0].item(), blstats[1].item())}")
             self.prolog.assertz(f"walkable(({simbol[0]},{simbol[1]}), true)")
             self.prolog.assertz(f"is_known({cmd},({simbol[0]},{simbol[1]}), true)")
             list(self.prolog.query(f"retractall(command({cmd},({simbol[0]},{simbol[1]}), _))"))
