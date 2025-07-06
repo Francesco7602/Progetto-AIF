@@ -3,7 +3,7 @@ import nle.nethack.actions as actions
 import minihack.dat
 import time
 
-from Agent import AgentNetHack
+from AgentMinihack import AgentNetHack
 from utility import ascii_to_idx, print_stats, print_inventory, Simboli_unici
 import re
 

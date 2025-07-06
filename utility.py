@@ -54,7 +54,7 @@ def load(file, prolog):
         if s.strip():  # Solo se la stringa non è vuota
             prolog.assertz(s)
 
-def a_star(start, goal, agent, env):
+def a_star(start, goal, agent):
     from heapq import heappush, heappop
 
     open_set = []  # priority queue: (f(n), position)
@@ -77,13 +77,13 @@ def a_star(start, goal, agent, env):
             path.reverse()
             return path
 
-        for nx, ny in agent.neighbors(*current, env):  # get walkable neighbors
+        for nx, ny in agent.neighbors(current):  # get walkable neighbors
             neighbor = (nx, ny)
             new_cost = cost_so_far[current] + 1  # cost to reach this neighbor
 
             if neighbor not in cost_so_far or new_cost < cost_so_far[neighbor]:
                 cost_so_far[neighbor] = new_cost
-                priority = new_cost + agent.heuristic(neighbor, goal, env)  # f(n) = g(n) + h(n)
+                priority = new_cost + agent.heuristic(current, neighbor, goal)  # f(n) = g(n) + h(n)
                 heappush(open_set, (priority, neighbor))
                 came_from[neighbor] = current
 

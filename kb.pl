@@ -12,7 +12,7 @@
 :- dynamic hunger/1.
 :- dynamic command/3.
 :- dynamic is_known/3.
-:- dynamic is_useful/4.
+:- dynamic is_useful/3.
 :- dynamic is_monster/2.
 :- dynamic moveInvalid/3.
 :- dynamic winner/2.
