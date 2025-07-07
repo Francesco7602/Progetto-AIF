@@ -73,7 +73,7 @@ class AgentNetHack:
         self.turni=0
         self.cachewalkable={}
         self.cardinal_directions =True
-        self.cmd=[0,ascii_to_idx('o')]
+        self.cmd=[0,ascii_to_idx('o'),ascii_to_idx('c'), ascii_to_idx('F'),48]
 
         height = len(self.obs['tty_chars']) - 3
         width = len(self.obs['tty_chars'][0])
@@ -199,6 +199,13 @@ class AgentNetHack:
                         if len(results) > 0:
                             priority = int(results[0]['X'])
                             self.goals.append(((code, color), (x, y), priority, dist, int(results[0]['Y'])))
+                            ##action(simbol, cmd, dict{cmd:cmd})
+                            #results = list(self.prolog.query(f"action(({code},{color}), {int(results[0]['Y'])}, X)"))
+                            #if len(results) > 0:
+                            #    cmd = results[0]['cmd']
+                            #else:
+                            #    cmd = 0
+                            #self.goals.append(((code, color), (x, y), priority, dist, cmd))
         self.goals = sorted(self.goals, key=lambda x: (-x[2], x[3]))
         print(f"self.goals {self.goals}")
 
@@ -213,6 +220,12 @@ class AgentNetHack:
             return []
         
         target = self.goals[0]
+
+        list(self.prolog.query(f"retractall(goal(_,_,_))"))
+        self.prolog.assertz(f"goal(({target[0][0]},{target[0][1]}),{target[1][0]}, {target[1][1]})")
+        results1 = list(self.prolog.query(f"goal(Z, X,Y)"))
+        print(f"Verifica insert goal {results1}, simb: {target[0]}, pos: {target[1]}")
+
         if target[4]==2:
             results = list(self.prolog.query(f"is_known(Y,({target[0][0]},{target[0][1]}), X)"))
 
@@ -230,12 +243,21 @@ class AgentNetHack:
             path = a_star(self.pos, target[1], self)
             #self.cardinal_directions =False
         else:
-            lista=self.neighbors(target[1], cardinal_directions=True)
-            #scegliere il vicino può vicino a noi
-            print(f"{target[1]} non walkable: vado in {lista[0]}, {target[0]}")
-            path = a_star(self.pos, lista[0], self)
-            if len is None:
-                path.append(target[1])
+            # Choose the neighbor that is closest to our position
+            lista = self.neighbors(target[1], cardinal_directions=True)
+            nearestNeighbor = min(
+                lista,
+                key=lambda neighbor: max(abs(self.pos[0] - neighbor[0]), abs(self.pos[1] - neighbor[1]))
+            )
+
+            print(f"{target[1]} non walkable: vado in {nearestNeighbor}, {target[0]}")
+            path = []
+            if nearestNeighbor!=self.pos:
+                path = a_star(self.pos, nearestNeighbor, self)
+            else:
+                path = [self.pos]
+            #if len is None:
+            #    path.append(target[1])
         if path is None:
             print("Not working")
             return []
@@ -247,6 +269,10 @@ class AgentNetHack:
         if len(path) ==1:
             print(f"start {start} path {path} target {target} ")
             cmd = []
+            list(self.prolog.query(f"retractall(agent_pos(_,_))"))
+            self.prolog.assertz(f"agent_pos({self.pos[0]},{self.pos[1]})")
+            results1 = list(self.prolog.query(f"action(({target[0][0]},{target[0][1]}),{target[4]}, X)"))
+            target = (target[0], target[1], target[2], target[3], results1[0]['X']['cmd'])
             match target[4]:
                 case 0:
                     cmd.append(self.move_to(start, target[1]))
@@ -255,10 +281,14 @@ class AgentNetHack:
                     cmd.append(self.move_to(start, target[1]))
             n = 1 if target[0] ==(0,0) else 10                
             arr.append(((self.map[target[1][0]][target[1][1]]['x'].item(),self.map[target[1][0]][target[1][1]]['y'].item()), target[1], cmd, n))
-            
+
         for step in path[1:]:
             cmd = []
             if step == target[1]:
+                list(self.prolog.query(f"retractall(agent_pos(_,_))"))
+                self.prolog.assertz(f"agent_pos({start[0]},{start[1]})")
+                results1 = list(self.prolog.query(f"action(({target[0][0]},{target[0][1]}),{target[4]}, X)"))
+                target = (target[0], target[1], target[2], target[3], results1[0]['X']['cmd'])
                 match target[4]:
                     case 0:
                         cmd.append(self.move_to(start, step))
@@ -692,6 +722,7 @@ class AgentNetHack:
         self.updateMap()
         
         self.pos = (blstats[0].item(), blstats[1].item())
+        self.prolog.assertz(f"agent_pos({self.pos[0], self.pos[1]})")
         return flagUpdate
 
         
