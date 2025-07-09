@@ -1,6 +1,6 @@
 from pyswip import Prolog
 from pathlib import Path
-from utility import a_star, Simboli_unici, SymbolToPos, save, load, ascii_to_idx
+from utility import a_star, Simboli_unici, SymbolToPos, save, load, ascii_to_idx, inventoryToProlog, print_inventory
 import os
 import time
 import numpy as np
@@ -44,7 +44,8 @@ class AgentNetHack:
         self.wisdom = blstats[7]
         self.charisma = blstats[8]
         self.score = blstats[9]
-        self.hp = (blstats[10], blstats[11])  # current, max
+        self.hp = blstats[10]  # current, max
+        self.hpold = self.hp
         self.energy = (blstats[14], blstats[15])  # current, max
         self.ac = blstats[16]
 
@@ -73,7 +74,10 @@ class AgentNetHack:
         self.turni=0
         self.cachewalkable={}
         self.cardinal_directions =True
-        self.cmd=[0,ascii_to_idx('o'),ascii_to_idx('c'), ascii_to_idx('F'),48]
+        self.cmd=[0,ascii_to_idx('o'),ascii_to_idx('c')] #, ascii_to_idx('F'),48]
+        self.combatMode=False
+        self.fight=True
+        self.survivor =False
 
         height = len(self.obs['tty_chars']) - 3
         width = len(self.obs['tty_chars'][0])
@@ -169,7 +173,7 @@ class AgentNetHack:
             for x in range(self.width):
                 code = self.map[x][y]["x"].item()
                 color = self.map[x][y]["y"].item()
-                #print(f"Elab simbol {(code,color)}")
+               
                 if self.explored.get((x,y),0)==1: #per evitare di andare nelle posizioni che ci danno errore (se non li conosciamo)
                     print(f"Salto simbol {(code,color)}")
                     continue
@@ -183,13 +187,20 @@ class AgentNetHack:
                     case (64,15): #character
                         pass
                     case _:
-                        #results = list(self.prolog.query(f"winner({code}, {color})"))
-                        #if len(results) > 0:
-                        #    self.goals.append(((code, color), (x, y), 100))
-                        results = list(self.prolog.query(f"is_monster(({code},{color}), X)"))
+                        results = list(self.prolog.query(f"beliefSeeMonster(({code},{color}),{self.hp},{self.hpold},X)"))
                         if len(results) > 0:
                             danger = int(results[0]['X'])
                             self.goals.append(((code, color), (x, y), 6 + danger, dist, 1))
+                            self.combatMode=True
+                            list(self.prolog.query(f"retractall(is_known(_,({code},{color}),_))"))
+                            list(self.prolog.query(f"retractall(command(_,({code},{color}),_))"))
+                            list(self.prolog.query(f"retractall(is_useful(_,({code},{color}),_))"))
+                            list(self.prolog.query(f"retractall(walkable(({code},{color}),_))"))
+
+                            continue
+                        results = list(self.prolog.query(f"winner({code}, {color})"))
+                        if len(results) > 0:
+                            self.goals.append(((code, color), (x, y), 6, dist, 0))
                             continue
                         results = list(self.prolog.query(f"is_known(Y,({code},{color}), X)"))
                         if len(results) != len(self.cmd):
@@ -208,7 +219,9 @@ class AgentNetHack:
                             #self.goals.append(((code, color), (x, y), priority, dist, cmd))
         self.goals = sorted(self.goals, key=lambda x: (-x[2], x[3]))
         print(f"self.goals {self.goals}")
-
+        if len(self.goals)==0:
+            self.survivor =True
+            return []
         print(f"goal {self.goals[0]}")
 
         #e = input("premi e per uscire .... ")
@@ -237,27 +250,75 @@ class AgentNetHack:
             target = (target[0], target[1], target[2], target[3], tmpcmd[0])
             print (f"I need to learn ({target[0][0]},{target[0][1]}) cmd: {tmpcmd[0]}")
         if target[4]==1:
-            print ("I need to fight")
-        
-        if self.cachewalkable.get(target[0],True): #target[4]==0 and
-            path = a_star(self.pos, target[1], self)
-            #self.cardinal_directions =False
-        else:
-            # Choose the neighbor that is closest to our position
-            lista = self.neighbors(target[1], cardinal_directions=True)
-            nearestNeighbor = min(
-                lista,
-                key=lambda neighbor: max(abs(self.pos[0] - neighbor[0]), abs(self.pos[1] - neighbor[1]))
-            )
-
-            print(f"{target[1]} non walkable: vado in {nearestNeighbor}, {target[0]}")
-            path = []
-            if nearestNeighbor!=self.pos:
-                path = a_star(self.pos, nearestNeighbor, self)
+            print (f"I need to fight {self.fight}")
+            self.prolog.assertz(f"maybe_monster(({target[0][0]},{target[0][1]}),5)")
+            self.cardinal_directions=False
+            nodo = None
+            if len(list(self.prolog.query('healthy')))==0:
+                print("fugo dal mostro")
+                self.cardinal_directions=True
+                for y1 in range(self.height):
+                    for x1 in range(self.width):
+                        if self.is_walkable((x1, y1), True):
+                            dist = max(abs(x1 - target[1][0]), abs(y1 - target[1][1]))
+                            if nodo is None:
+                                nodo = (x1,y1)
+                                temp = dist
+                            else:
+                                if dist<10:
+                                    if dist>temp:
+                                        nodo = (x1,y1)
+                                        temp=dist
+                            
+                
+                list(self.prolog.query(f"retractall(pos_monster(_,_))"))
+                self.prolog.assertz(f"pos_monster({nodo[0]},{nodo[1]})")
+                target = ((self.map[nodo[0]][nodo[1]]['x'].item(),self.map[nodo[0]][nodo[1]]['y'].item()), nodo, target[2], target[3], 0)
+                print(f"target: {target}")
             else:
+
+                lista = self.neighbors(target[1])
+                print(lista)
+                # the agent moves to dodge the blows
+                if not self.fight:
+                    print("schivo")
+                    if self.pos in lista:
+                        lista.remove(self.pos)
+                        target = (target[0], target[1], target[2], target[3], 0)
+
+                nodo = min(
+                        lista,
+                        key=lambda neighbor: max(abs(self.pos[0] - neighbor[0]), abs(self.pos[1] - neighbor[1]))
+                    )
+            
+            if nodo!=self.pos:
+                print("non sono accanto")
+                path = a_star(self.pos, nodo, self)
+            else:
+                print("sono accanto")
                 path = [self.pos]
-            #if len is None:
-            #    path.append(target[1])
+
+        else:      
+        
+            if self.is_walkable(target[1], True):
+                path = a_star(self.pos, target[1], self)
+                #self.cardinal_directions =False
+            else:
+                # Choose the neighbor that is closest to our position
+                lista = self.neighbors(target[1], cardinal_directions=True)
+                nearestNeighbor = min(
+                    lista,
+                    key=lambda neighbor: max(abs(self.pos[0] - neighbor[0]), abs(self.pos[1] - neighbor[1]))
+                )
+
+                print(f"{target[1]} non walkable: vado in {nearestNeighbor}, {target[0]}")
+                path = []
+                if nearestNeighbor!=self.pos:
+                    path = a_star(self.pos, nearestNeighbor, self)
+                else:
+                    path = [self.pos]
+                #if len is None:
+                #    path.append(target[1])
         if path is None:
             print("Not working")
             return []
@@ -273,13 +334,20 @@ class AgentNetHack:
             self.prolog.assertz(f"agent_pos({self.pos[0]},{self.pos[1]})")
             results1 = list(self.prolog.query(f"action(({target[0][0]},{target[0][1]}),{target[4]}, X)"))
             target = (target[0], target[1], target[2], target[3], results1[0]['X']['cmd'])
+            n=1
             match target[4]:
+                case 1:
+                    cmd.append(ascii_to_idx('F'))
+                    cmd.append(self.move_to(start, target[1]))
+                    #self.fight = not self.fight
                 case 0:
+                    self.fight = True
                     cmd.append(self.move_to(start, target[1]))
                 case _:
                     cmd.append(target[4])
                     cmd.append(self.move_to(start, target[1]))
-            n = 1 if target[0] ==(0,0) else 10                
+                    n=5
+            #n = 1 if target[0] ==(0,0) else 10                
             arr.append(((self.map[target[1][0]][target[1][1]]['x'].item(),self.map[target[1][0]][target[1][1]]['y'].item()), target[1], cmd, n))
 
         for step in path[1:]:
@@ -309,6 +377,8 @@ class AgentNetHack:
         #e = input("premi e per uscire .... ")
         #if e =='e':
         #    return []
+
+        self.cardinal_directions=True
 
         return arr
                 
@@ -446,7 +516,14 @@ class AgentNetHack:
         return result
 
     def move(self):
+        inv = print_inventory(self.obs)
+        #list(self.prolog.query(f"retractall(has(_,_,_,_,_,_))"))
+        #inventoryToProlog(inv, self.prolog)
+        #results = list(self.prolog.query(f"has(X,Y,Z,W,A,B)"))
+        #print(f"inv: {results}")
         path = self.goal()
+        if self.survivor:
+            return
         if len(path) ==0:
             return
         for simbol, pos, listcmd, n in path:
@@ -683,10 +760,17 @@ class AgentNetHack:
             obscode = tty_chars[pos[1]+1][pos[0]]
             obscolor = tty_colors[pos[1]+1][pos[0]]
             if len(results)==0 and ((simbol[1]!=obscolor) or (simbol[0]!=obscode)) and (obscode,obscolor)!=(64,15):
-                self.prolog.assertz(f"is_known({cmd},({simbol[0]},{simbol[1]}), true)")
-                self.prolog.assertz(f"is_useful({cmd},({simbol[0]},{simbol[1]}), 1)")
+                if self.combatMode:
+                    self.prolog.assertz(f"is_monster(({simbol[0]},{simbol[1]}), 1)")
+                    self.combatMode=False
+                    print(f"combatMode: {self.combatMode}")
+                else:
+                    if cmd==0:
+                        self.prolog.assertz(f"walkable(({simbol[0]},{simbol[1]}), false)")
+                    self.prolog.assertz(f"is_known({cmd},({simbol[0]},{simbol[1]}), true)")
+                    self.prolog.assertz(f"is_useful({cmd},({simbol[0]},{simbol[1]}), 1)")
+                    print(f"INFO: is_known({cmd},({simbol[0]},{simbol[1]}), true) new symbol {obscode} {obscolor}")
                 flagUpdate = True
-                print(f"INFO: is_known({cmd},({simbol[0]},{simbol[1]}), true) new symbol {obscode} {obscolor}")
             elif len(results)>0 and ((simbol[1]!=obscolor) or (simbol[0]!=obscode)):
                 flagUpdate = True
 
@@ -696,7 +780,7 @@ class AgentNetHack:
         if len(results) ==0 and  cmd==0 and (self.pos == (blstats[0].item(), blstats[1].item())):
             print(f"probabile muro {pos} element {simbol[0]} {simbol[1]}")
             self.prolog.assertz(f"risk_zone_pos(({pos[0]},{pos[1]}),10)")
-            self.explored[pos]=1
+            #self.explored[pos]=1
             flagUpdate = True
         elif len(results) ==0 and cmd==0:
             print(f"Non lo conosco, ma ora ho capito che è walkable ({simbol[0]},{simbol[1]}) posi {(self.pos)} , {(blstats[0].item(), blstats[1].item())}")
@@ -717,11 +801,54 @@ class AgentNetHack:
 
     def observe_and_update(self, simbol, step, cmd=None, obj=None):
         blstats = self.obs['blstats']
-        cmd = cmd if cmd >=8 else 0
-        flagUpdate  = self.learnSimbol(simbol, step, cmd)
+        self.hpold = self.hp
+        self.hp = blstats[10]
+        list(self.prolog.query(f"retractall(health_max(_))"))
+        list(self.prolog.query(f"retractall(health(_))"))
+        self.prolog.assertz(f"health_max({blstats[11]})")
+        self.prolog.assertz(f"health({blstats[10]})")
+        msg = "".join([chr(c) for c in self.obs["message"]]).strip()
+        if msg.find("miss")!=-1 or msg.find("hit")!=-1:
+            print(f"delete explored")
+            self.explored={}
+        if msg.find("[ynq]")!=-1:
+            self.obs, reward, terminal, truncated, info = self.env.step(ascii_to_idx('n'))
+            print(f"corpo {simbol}")
+            self.explored[step]=1
+        if msg[1:4]==" - ":
+            if msg.find("potion")!=-1:
+                self.prolog.assertz(f"has('potion gain level', _, _, _, _, {msg[0]})")
+            
+            else:
+                inv = print_inventory(self.obs)
+                list(self.prolog.query(f"retractall(has(_,_,_,_,_,_))"))
+                inventoryToProlog(inv, self.prolog)
+            if  len(list(self.prolog.query(f"is_useful({0},({simbol[0]},{simbol[1]}), _)")))==0:
+                self.prolog.assertz(f"is_useful({0},({simbol[0]},{simbol[1]}), 6)")
+                for c in self.cmd:
+                    self.prolog.assertz(f"is_known({c},({simbol[0]},{simbol[1]}), false)")
+            
+            flagUpdate = True
+
+        else:
+            cmd = cmd if cmd >=8 else 0
+            flagUpdate  = self.learnSimbol(simbol, step, cmd)
+            flagUpdate = True if self.hp<self.hpold else False
         self.updateMap()
         
+
+        ris = list(self.prolog.query(f"use(X,Y)"))
+        for el in ris:
+            self.obs, reward, terminal, truncated, info = self.env.step(ascii_to_idx(el['Y']))
+            self.env.render()
+            self.obs, reward, terminal, truncated, info = self.env.step(ascii_to_idx(el['X']))
+            self.env.render()
+        list(self.prolog.query(f"retractall(has(_,_,_,_,_,_))"))
+        inv = print_inventory(self.obs)
+        inventoryToProlog(inv, self.prolog)
+
         self.pos = (blstats[0].item(), blstats[1].item())
+        list(self.prolog.query(f"retractall(agent_pos(_,_))"))
         self.prolog.assertz(f"agent_pos({self.pos[0], self.pos[1]})")
         return flagUpdate
 

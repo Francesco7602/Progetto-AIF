@@ -157,15 +157,15 @@ def print_inventory(obs):
     inv_letters = obs["inv_letters"]
     inv_strs = obs["inv_strs"]
     array = []
-    print("Inventario:")
+    #print("Inventario:")
     for idx, c in enumerate(inv_letters):
         if c != 0:
             letter = chr(c)
             # Ogni inv_str è una lista di codici ASCII: convertiamola in stringa
             obj_name = "".join([chr(x) for x in inv_strs[idx] if x != 0]).strip()
             array.append(f"  {letter}: {obj_name}")
-            print(f"  {letter}: {obj_name}")
-    print()
+    #        print(f"  {letter}: {obj_name}")
+    #print()
     return array
 
 
@@ -255,7 +255,7 @@ def SymbolToPos(Map, prolog, dict, oldGoal= [], turni= 1):#todo levare questa fu
     print(sorted(arr, key=lambda x: x[2], reverse= True))"""
     return sorted(combined, key=lambda x: x[2], reverse= True)
 
-def inventoryToProlog(list, prolog):
+def inventoryToProlog2(list, prolog):
     for line in list:
         match = re.search(r"([a-z]): (an?|[\d]+)? ?(blessed|uncursed|cursed)? ?(\+\d+)? ?(.*?)( \((.*?)\))?$", line)
         if match:
@@ -272,5 +272,32 @@ def inventoryToProlog(list, prolog):
                 "quantity": quantity,
                 "note": note,
             })"""
+            flag = "false" if note is None else "true"
+            prolog.assertz(f"has({obj}, {state}, {quantity}, {bonus}, {flag}, {id})")
+def inventoryToProlog(lst, prolog):
+    for line in lst:
+        match = re.search(r"([a-z]): (an?|[\d]+)? ?(blessed|uncursed|cursed)? ?(\+\d+)? ?(.*?)( \((.*?)\))?$", line)
+        if match:
+            id, article, state, bonus, obj, _, note = match.groups()
+            try:
+                quantity = int(article)
+            except:
+                quantity = 1
+
+            # Sanitize for Prolog
+            def quote(s):
+                if s is None:
+                    return 'none'
+                s = s.strip()
+                # Metti apici solo se contiene spazi o simboli
+                if re.search(r"[^\w]", s):
+                    return f"'{s}'"
+                return s
+
+            # Se state o bonus sono None, metti 'none'
+            state = quote(state)
+            bonus = quote(bonus)
+            obj = quote(obj)
+            #print(f"inventoryToProlog: {obj}")
             flag = "false" if note is None else "true"
             prolog.assertz(f"has({obj}, {state}, {quantity}, {bonus}, {flag}, {id})")

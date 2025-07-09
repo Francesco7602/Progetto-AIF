@@ -3,7 +3,7 @@
 :- dynamic walkable/2.
 :- dynamic health/1.
 :- dynamic health_max/1.
-:- dynamic has/4.
+:- dynamic has/6.
 % goal(simbol,pos) simbol=(code,color) and x,y
 :- dynamic goal/3.
 % agent_pos is position of agent x,y
@@ -21,9 +21,9 @@
 :- dynamic moveInvalid/3.
 :- dynamic winner/2.
 
-% escape(X,Y) X simbol moster and Y true/false
+% escape(X,Y) X simbol monster and Y true/false
 :- dynamic escape/2.
-%escape(_,false).
+escape(_,false).
 
 walkable((0, 0),false).
 walkable((32, 0),false).
@@ -63,7 +63,72 @@ action(S, 30, dict{cmd:0}) :-
     is_useful(30, S, _),
     near_goal(S).
 
-action(S, C, dict{cmd:C}).
+action(_, C, dict{cmd:C}).
+
+
+
+
+
+% beliefSeeMonster(S, HealthBefore, HealthAfter, Danger) is true and returns the monster  danger value
+% if symbol S is a known monster;
+% if S is unknown and HP decreased, returns true and Danger is the HP loss;
+% returns false otherwise.
+:- dynamic beliefSeeMonster/4.
+
+:- dynamic maybe_monster/2.
+
+beliefSeeMonster(S, Hp, HpOld, Danger) :-
+    (is_monster(S, D); maybe_monster(S, D)),
+    T is HpOld - Hp,
+    Danger is max(T, D).
+
+
+beliefSeeMonster(S, Hp, HpOld, Danger) :-
+    \+ is_known(_, S, _),
+    Danger is HpOld - Hp,
+    Danger>0.
+
+
+:- dynamic use/2.
+
+use(Y, 'q') :-
+    has('potion gain level',_,_,_,_,Y).
+
+:- dynamic pos_monster/2.
+
+use(Y, 'q') :-
+    has('potions of healing',_,_,_,_,Y),
+    \+ healthy,
+    pos_monster(A,B),
+    agent_pos(X,Y),
+    DX is abs(A - X),
+    DY is abs(B - Y),
+    D is max(DX, DY),
+    D >4.
+
+use(Y, 'q') :-
+    has('potion of healing',_,_,_,_,Y),
+    \+ healthy,
+    pos_monster(A,B),
+    agent_pos(X,Y),
+    DX is abs(A - X),
+    DY is abs(B - Y),
+    D is max(DX, DY),
+    D >4.
+
+
+use(Y, 'w') :-
+    has('samurai sword',_,_,_,'false',Y).
+
+use(Y, 'w') :-
+    has('long samurai sword',_,_,_,'false',Y).
+
+%use(Y, 'T') :-
+%    has('robe',_,_,_,'true',Y),
+%    has('ring mail',_,_,_,'false',_).
+%
+%use(Y, 'W') :-
+%    has('ring mail',_,_,_,'false',Y).
 
 
 
