@@ -59,9 +59,9 @@ class AgentNetHack:
 
 
 
-    def __init__(self, env):
+    def __init__(self, env, pathProlog):
         self.prolog = Prolog()
-        self.prolog.consult("kb.pl")
+        self.prolog.consult(pathProlog)
         self.load()
         self.env=env
         self.obs, self.info = env.reset()
