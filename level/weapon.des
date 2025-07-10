@@ -1,0 +1,21 @@
+MAZE: "mylevel", ' '
+FLAGS:hardfloor
+INIT_MAP: solidfill,' '
+GEOMETRY:center,center
+MAP
+-----------------
+|...............|
+|...............|
+|...............|
+|...............|
+|...............|
+|...............|
+|...............|
+-----------------
+
+ENDMAP
+
+
+STAIR: random, down
+OBJECT:(')',"tsurugi"),random,blessed,0
+OBJECT:(')',"katana"),random,blessed,0

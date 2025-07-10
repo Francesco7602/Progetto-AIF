@@ -1,0 +1,21 @@
+MAZE: "mylevel", ' '
+FLAGS:hardfloor
+INIT_MAP: solidfill,' '
+GEOMETRY:center,center
+MAP
+-----------------
+|...............|
+|...............|
+|...............|
+|...............|
+|...............|
+|...............|
+|...............|
+-----------------
+
+ENDMAP
+
+
+STAIR: random, down
+OBJECT:('!',"gain level"),random,blessed,0
+OBJECT:('!',"gain level"),random,cursed,0

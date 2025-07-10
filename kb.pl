@@ -47,12 +47,6 @@ near_goal(S) :-
     D is max(DX, DY),
     D =:= 1.
 
-%% Action close
-%action(S, C dict{cmd:C}) :-
-%    escape(_,true),
-%    is_useful(30,S, _),
-%    near_goal(S).
-
 action(S, 30, dict{cmd:30}) :-
     escape(_, true),
     is_useful(30, S, _),
@@ -73,8 +67,8 @@ action(_, C, dict{cmd:C}).
 % if symbol S is a known monster;
 % if S is unknown and HP decreased, returns true and Danger is the HP loss;
 % returns false otherwise.
-:- dynamic beliefSeeMonster/4.
 
+:- dynamic beliefSeeMonster/4.
 :- dynamic maybe_monster/2.
 
 beliefSeeMonster(S, Hp, HpOld, Danger) :-
@@ -88,97 +82,21 @@ beliefSeeMonster(S, Hp, HpOld, Danger) :-
     Danger is HpOld - Hp,
     Danger>0.
 
+:- dynamic weapon/2.
 
 :- dynamic use/2.
 
 use(Y, 'q') :-
-    has('potion gain level',_,_,_,_,Y).
+    has('potion', State, _, _, _, Y),
+    State \= 'cursed'.
 
 :- dynamic pos_monster/2.
 
 use(Y, 'q') :-
-    has('potions of healing',_,_,_,_,Y),
-    \+ healthy,
-    pos_monster(A,B),
-    agent_pos(X,Y),
-    DX is abs(A - X),
-    DY is abs(B - Y),
-    D is max(DX, DY),
-    D >4.
-
-use(Y, 'q') :-
-    has('potion of healing',_,_,_,_,Y),
-    \+ healthy,
-    pos_monster(A,B),
-    agent_pos(X,Y),
-    DX is abs(A - X),
-    DY is abs(B - Y),
-    D is max(DX, DY),
-    D >4.
-
+    has('healing',_,_,_,_,Y),
+    \+ healthy.
 
 use(Y, 'w') :-
-    has('samurai sword',_,_,_,'false',Y).
-
-use(Y, 'w') :-
-    has('long samurai sword',_,_,_,'false',Y).
-
-%use(Y, 'T') :-
-%    has('robe',_,_,_,'true',Y),
-%    has('ring mail',_,_,_,'false',_).
-%
-%use(Y, 'W') :-
-%    has('ring mail',_,_,_,'false',Y).
-
-
-
-%% Wrapper Python-style:
-%
-%% Action drink
-%action(dict{cmd:64, slot:Key}) :-  % 64=quaff, slot=Key
-%    has(potion, healing, _, Key),
-%    \+ healthy.
-%
-%% Azione: Open
-%action(dict{cmd:57}) :-
-%    near_goal,
-%    goal(_, X, Y),
-%    openable(X, Y).
-%
-%% Action eat
-%action(dict{cmd:35, slot:Key}) :-  % 64=quaff, slot=Key
-%    has(food, _, _, Key),
-%    \+ hungry.
-%
-%% Azione: Open
-%action(dict{cmd:57}) :-
-%    near_goal,
-%    goal(_, X, Y),
-%    openable(X, Y).
-%
-%% Action close
-%action(cmd, dict{cmd:cmd}) :-
-%    near_goal,
-%    escape(_,true).
-%
-%
-%
-%
-%%walkable((46,7), true).
-%%walkable((43,3), false).
-%%walkable((45,7), false).
-%%walkable((124,7), false).
-%
-%%openable(43, 3).
-%%openable(4, 3).
-%
-%health(10).
-%health_max(10).
-%hunger(2).
-%
-%has(potion, healing, _, b).
-%% Stato attuale del agente (posizione)
-%agent_pos(2,1).
-%
-%% Goal (posizione da raggiungere)
-%goal(pos(1,1), 4, 3).
+    has(Nome, _, _, _, false, Y),
+    weapon(Nome, Punti),
+    \+ (has(Nome2, _, _, _, false, _), weapon(Nome2, Punti2), Punti2 > Punti).
