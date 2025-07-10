@@ -4,11 +4,13 @@ from utility import a_star, save, load, ascii_to_idx, inventoryToProlog, print_i
 import os
 import time
 import numpy as np
+import sys
 
+sys.path.append('/content/Progetto-AIF')
 class AgentNetHack:
     def load(self):
-        if Path("memory").exists():
-            load("memory", self.prolog)
+        if Path("/content/Progetto-AIF/memory").exists():
+            load("/content/Progetto-AIF/memory", self.prolog)
     def save(self):
         self.pointweapon()
         list(self.prolog.query(f"retractall(walkable((32,0),_))"))
